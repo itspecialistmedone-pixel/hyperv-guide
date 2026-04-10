@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyper-V & Oracle IT Manual - Step by Step</title>
+    <title>Hyper-V & Oracle IT Manual</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,6 +13,7 @@
             --text-dark: #2d3748;
             --text-light: #4a5568;
             --accent: #e2e8f0;
+            --active-bg: #ebf4ff;
         }
         
         * { box-sizing: border-box; }
@@ -23,11 +24,9 @@
             color: var(--text-dark);
             line-height: 1.6;
             margin: 0;
-            padding: 15px;
+            padding: 20px;
             font-size: 16px;
         }
-
-        .container { max-width: 850px; margin: 0 auto; }
 
         .header {
             text-align: center;
@@ -35,311 +34,339 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border-radius: 12px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(0,86,179,0.2);
         }
-        .header h1 { margin: 0; font-size: 2rem; line-height: 1.2; }
-        .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 1rem; }
 
-        /* Main Accordion */
-        details.main-details {
-            background: #ffffff;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        details.main-details[open] { box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        
-        summary.main-summary {
-            padding: 18px 20px;
-            font-size: 1.15rem;
-            font-weight: 600;
-            background-color: #ffffff;
-            color: var(--primary);
-            cursor: pointer;
-            list-style: none;
+        .header h1 { margin: 0; font-size: 2.2rem; line-height: 1.2; }
+        .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 1.1rem; }
+
+        /* Layout Container */
+        .layout-wrapper {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 5px solid var(--primary);
-            user-select: none;
-        }
-        summary.main-summary::-webkit-details-marker { display: none; }
-        summary.main-summary::after {
-            content: '+';
-            font-size: 1.5rem;
-            color: var(--primary);
-            transition: transform 0.3s;
-        }
-        details.main-details[open] > summary.main-summary::after {
-            content: '−';
-            transform: rotate(180deg);
-        }
-        details.main-details[open] > summary.main-summary {
-            border-bottom: 1px solid var(--accent);
-            background-color: #f8fafc;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: flex-start;
         }
 
-        .content { padding: 20px; color: var(--text-light); animation: fadeIn 0.4s ease-in-out; }
-
-        /* Sub Accordion (Nested) */
-        details.sub-details {
-            background: #f8fafc;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border: 1px solid var(--accent);
+        /* Sidebar (Left) */
+        .sidebar {
+            flex: 0 0 300px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 20px;
         }
-        summary.sub-summary {
-            padding: 12px 15px;
+
+        .nav-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            padding: 15px 20px;
+            margin-bottom: 5px;
+            font-family: 'Prompt', sans-serif;
             font-size: 1rem;
             font-weight: 600;
             color: var(--text-dark);
+            border-radius: 8px;
             cursor: pointer;
-            list-style: none;
-            display: flex;
-            align-items: center;
-        }
-        summary.sub-summary::-webkit-details-marker { display: none; }
-        summary.sub-summary::before {
-            content: '▶';
-            font-size: 0.8rem;
-            margin-right: 10px;
-            color: var(--primary);
-            transition: transform 0.2s;
-        }
-        details.sub-details[open] > summary.sub-summary::before {
-            transform: rotate(90deg);
-        }
-        .sub-content {
-            padding: 15px;
-            border-top: 1px solid var(--accent);
-            background: #ffffff;
-            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
         }
 
+        .nav-btn:hover { background-color: var(--accent); }
+        
+        .nav-btn.active {
+            background-color: var(--active-bg);
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Main Content (Right) */
+        .main-content {
+            flex: 1;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            min-height: 60vh;
+        }
+
+        .tab-pane { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .tab-pane.active { display: block; }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
+            from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        ol.steps { padding-left: 20px; margin-bottom: 0; }
-        ol.steps li { margin-bottom: 12px; padding-left: 5px; }
+        /* Typography & Elements inside Content */
+        h2 { color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+        h3 { color: var(--text-dark); margin-top: 25px; }
+        ul, ol { padding-left: 20px; margin-bottom: 15px; }
+        li { margin-bottom: 10px; }
         ol.steps li::marker { font-weight: 600; color: var(--primary); }
         
         .highlight { font-weight: 600; color: #d9534f; }
         .ui-btn { 
-            background: #e2e8f0; color: #2d3748; padding: 2px 6px; 
-            border-radius: 4px; font-size: 0.85rem; border: 1px solid #cbd5e0;
+            background: var(--accent); color: var(--text-dark); padding: 2px 8px; 
+            border-radius: 4px; font-size: 0.9rem; border: 1px solid #cbd5e0;
         }
+        .badge {
+            display: inline-block; background-color: #28a745; color: white;
+            padding: 3px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px;
+        }
+        .badge-danger { background-color: #dc3545; }
         pre {
-            background-color: #2d3748; color: #f8f8f2; padding: 15px;
-            border-radius: 8px; overflow-x: auto; font-family: monospace; font-size: 0.9rem;
+            background-color: #2d3748; color: #f8f8f2; padding: 20px;
+            border-radius: 8px; overflow-x: auto; font-family: monospace; font-size: 1rem;
         }
         .warning-box {
-            background-color: #fff3cd; color: #856404; padding: 15px;
-            border-radius: 8px; border-left: 5px solid #ffeeba; margin-top: 15px; font-size: 0.9rem;
+            background-color: #fff3cd; color: #856404; padding: 20px;
+            border-radius: 8px; border-left: 6px solid #ffeeba; margin-top: 20px; font-size: 0.95rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .layout-wrapper { flex-direction: column; }
+            .sidebar { flex: auto; width: 100%; position: relative; top: 0; display: flex; flex-wrap: wrap; gap: 5px; }
+            .nav-btn { flex: 1 1 48%; padding: 10px 15px; font-size: 0.9rem; text-align: center; border-left: none; border-bottom: 4px solid transparent; }
+            .nav-btn.active { border-left: none; border-bottom: 4px solid var(--primary); }
+        }
+        @media (max-width: 600px) {
+            .nav-btn { flex: 1 1 100%; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>IT Admin Guide</h1>
-        <p>คู่มือแบบ Step-by-Step: Hyper-V & Oracle Database</p>
-    </div>
+<div class="header" style="max-width: 1200px; margin: 0 auto 20px auto;">
+    <h1>IT Admin Guide</h1>
+    <p>Hyper-V & Oracle Database (Enterprise Free Edition)</p>
+</div>
 
-    <details class="main-details">
-        <summary class="main-summary">🛠️ 1. การติดตั้ง Hyper-V แบบละเอียด</summary>
-        <div class="content">
+<div class="layout-wrapper">
+    <nav class="sidebar">
+        <button class="nav-btn active" onclick="openTab(event, 'tab1')">🛠️ 1. ติดตั้ง Hyper-V</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab2')">💾 2. การ Backup VM</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab3')">🔄 3. DR Site (VM Replication)</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab4')">🔌 4. แก้ปัญหา Network</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab5')">🛢️ 5. สเปค VM (Oracle)</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab6')">🛡️ 6. Backup Oracle (ฟรี)</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab7')">🔗 7. Replicate Oracle (ฟรี)</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab8')">💻 8. PowerShell Commands</button>
+    </nav>
+
+    <main class="main-content">
+
+        <section id="tab1" class="tab-pane active">
+            <h2>🛠️ 1. การติดตั้ง Hyper-V แบบละเอียด</h2>
             <p>ตรวจสอบใน BIOS ของ Server ว่าเปิด <strong>Virtualization (VT-x / AMD-V)</strong> เรียบร้อยแล้ว</p>
             <ol class="steps">
                 <li>เปิด <span class="ui-btn">Server Manager</span> บน Windows Server</li>
                 <li>มุมขวาบนคลิก <span class="ui-btn">Manage</span> > เลือก <span class="ui-btn">Add roles and features</span></li>
-                <li>กด Next ไปเรื่อยๆ จนถึงหน้า <strong>Server Roles</strong> ให้ติ๊กถูกที่ช่อง <strong>Hyper-V</strong> > กด Add Features</li>
-                <li>หน้า <strong>Virtual Switches:</strong> เลือกว่าจะให้ VM ใช้การ์ดแลน (NIC) ใบไหนเพื่อออกเน็ต (หาก Server มีหลายพอร์ต ให้เลือกพอร์ตที่ต่อสายแลน External ไว้)</li>
-                <li>หน้า <strong>Migration:</strong> ติ๊กถูกที่ "Allow this server to send and receive live migrations..." (หากมีแผนทำ Cluster ในอนาคต)</li>
+                <li>กด Next ไปเรื่อยๆ จนถึงหน้า <strong>Server Roles</strong> ให้ติ๊กถูกที่ช่อง <strong>Hyper-V</strong></li>
+                <li>หน้า <strong>Virtual Switches:</strong> เลือกว่าจะให้ VM ใช้การ์ดแลน (NIC) ใบไหนเพื่อออกเน็ต</li>
+                <li>หน้า <strong>Migration:</strong> ติ๊กถูกที่ "Allow this server to send and receive live migrations..."</li>
                 <li>หน้า <strong>Default Stores:</strong> สำคัญมาก! ให้เปลี่ยน Path ที่เก็บไฟล์ VHDX และ Configuration ไปไว้ที่ Drive อื่นที่ไม่ใช่ Drive C: (เช่น <code>D:\Hyper-V</code>)</li>
-                <li>หน้า Confirmation ติ๊กเลือก Restart destination server automatically > กด <span class="ui-btn">Install</span> (เครื่องจะรีสตาร์ท 1-2 ครั้ง)</li>
+                <li>กด <span class="ui-btn">Install</span> และ Restart เครื่อง 1 รอบ</li>
             </ol>
-        </div>
-    </details>
+        </section>
 
-    <details class="main-details">
-        <summary class="main-summary">💾 2. วิธีการ Backup VM</summary>
-        <div class="content">
+        <section id="tab2" class="tab-pane">
+            <h2>💾 2. วิธีการ Backup VM</h2>
             
-            <details class="sub-details">
-                <summary class="sub-summary">วิธีที่ 1: ใช้ Windows Server Backup (ฟรีในตัว)</summary>
-                <div class="sub-content">
-                    <ol class="steps">
-                        <li>เปิด Server Manager > Add roles and features > หน้า Features ติ๊กเลือก <span class="ui-btn">Windows Server Backup</span> > Install</li>
-                        <li>ไปที่ปุ่ม Start ค้นหาและเปิดโปรแกรม <span class="ui-btn">Windows Server Backup</span></li>
-                        <li>แถบ Action ด้านขวามือ คลิก <span class="ui-btn">Backup Schedule...</span></li>
-                        <li>หน้า Select Backup Configuration เลือก <strong>Custom</strong></li>
-                        <li>หน้า Select Items for Backup คลิก <span class="ui-btn">Add Items</span> > กางโฟลเดอร์ <strong>Hyper-V</strong> > ติ๊กเลือก VM ที่ต้องการ Backup</li>
-                        <li>กำหนดเวลา Backup (Specify Backup Time) แนะนำเป็นช่วงดึกที่ไม่มีการใช้งานระบบ</li>
-                        <li>เลือก Destination ให้เซฟลง <strong>Back up to a hard disk that is dedicated for backups</strong> (แนะนำสุด) หรือ Network Share</li>
-                        <li>ตรวจสอบความถูกต้องและกด <span class="ui-btn">Finish</span></li>
-                    </ol>
-                </div>
-            </details>
+            <h3>วิธีที่ 1: ใช้ Windows Server Backup (ฟรีในตัว)</h3>
+            <ol class="steps">
+                <li>ติดตั้ง Feature <strong>Windows Server Backup</strong> ผ่าน Server Manager</li>
+                <li>เปิดโปรแกรม > เลือก <span class="ui-btn">Backup Schedule...</span></li>
+                <li>เลือก <strong>Custom</strong> > <span class="ui-btn">Add Items</span> > เลือกที่โฟลเดอร์ Hyper-V และเลือก VM</li>
+                <li>กำหนดเวลา (ควรเป็นกลางคืน) และเลือก Backup ลง External Disk หรือ Network Share</li>
+            </ol>
 
-            <details class="sub-details">
-                <summary class="sub-summary">วิธีที่ 2: ใช้ Veeam Community Edition (ฟรี / แนะนำ)</summary>
-                <div class="sub-content">
-                    <ol class="steps">
-                        <li>ติดตั้ง Veeam Backup & Replication Community Edition ให้เรียบร้อย</li>
-                        <li>เปิด Veeam Console ไปที่เมนู <span class="ui-btn">Backup Infrastructure</span> ด้านล่างซ้าย</li>
-                        <li>คลิกขวาที่ Managed Servers > <span class="ui-btn">Add Server</span> > เลือก <strong>Microsoft Hyper-V</strong></li>
-                        <li>ใส่ IP หรือ ชื่อของ Server เครื่องหลัก และระบุ Username/Password ของ Admin > กด Next จน Finish</li>
-                        <li>ไปที่เมนู <span class="ui-btn">Home</span> ด้านล่างซ้าย > คลิก <span class="ui-btn">Backup Job</span> (บน Ribbon) > เลือก Virtual machine</li>
-                        <li>ตั้งชื่อ Job > หน้า Virtual Machines กด <span class="ui-btn">Add...</span> แล้วเลือก VM ที่ต้องการ</li>
-                        <li>หน้า Storage เลือก Backup Repository ที่เตรียมไว้</li>
-                        <li>หน้า Schedule ตั้งเวลาให้ทำงานทุกวัน (Daily) > กด Apply และ Finish</li>
-                    </ol>
-                </div>
-            </details>
+            <h3>วิธีที่ 2: ใช้ Veeam Community Edition <span class="badge">แนะนำที่สุด</span></h3>
+            <ul>
+                <li>ติดตั้ง <span class="ui-btn">Veeam Backup & Replication</span> (ตัวฟรี)</li>
+                <li>เพิ่ม Hyper-V Server เข้าไปในระบบ</li>
+                <li>สร้าง Backup Job และเลือก VM ที่ต้องการ แนะนำให้เปิดฟีเจอร์ <strong>Application-aware processing</strong> เพื่อให้ Backup ทำงานร่วมกับ Database ภายใน VM ได้สมบูรณ์</li>
+            </ul>
+        </section>
 
-        </div>
-    </details>
+        <section id="tab3" class="tab-pane">
+            <h2>🔄 3. การทำ Replication (DR Site ระดับ VM)</h2>
+            <p>การโยนก้อน VM ไปสแตนด์บายที่ Server อีกเครื่องแบบ Real-time</p>
+            
+            <h3>Step 1: ฝั่งรับ (เครื่องสำรอง)</h3>
+            <ol class="steps">
+                <li>เปิด Hyper-V Settings > <strong>Replication Configuration</strong></li>
+                <li>ติ๊ก <span class="ui-btn">Enable this computer as a Replica server</span></li>
+                <li>เลือก Use Kerberos (HTTP) และใส่ IP ของเครื่องหลักในช่อง "Allow replication from the specified servers"</li>
+            </ol>
 
-    <details class="main-details">
-        <summary class="main-summary">🔄 3. การทำ Replication (DR Site)</summary>
-        <div class="content">
-            <p><strong>เงื่อนไข:</strong> ต้องมี Windows Server ที่ลง Hyper-V ไว้ 2 เครื่อง (เครื่องหลัก และ เครื่องสำรอง)</p>
+            <h3>Step 2: ฝั่งส่ง (เครื่องหลัก)</h3>
+            <ol class="steps">
+                <li>คลิกขวาที่ VM เครื่องหลัก > <span class="ui-btn">Enable Replication...</span></li>
+                <li>ใส่ชื่อหรือ IP ของเครื่องสำรอง</li>
+                <li>เลือก VHDX ที่ต้องการซิงค์</li>
+                <li>ตั้งความถี่ (เช่น 5 นาที) แล้วกด Finish ระบบจะเริ่มโยนข้อมูลก้อนแรก (Initial Sync) ทันที</li>
+            </ol>
+        </section>
 
-            <details class="sub-details">
-                <summary class="sub-summary">Step 1: ตั้งค่ารับข้อมูล (ทำที่เครื่องสำรอง DR)</summary>
-                <div class="sub-content">
-                    <ol class="steps">
-                        <li>เปิด Hyper-V Manager บนเครื่องสำรอง > คลิกเมนู <span class="ui-btn">Hyper-V Settings...</span> ด้านขวามือ</li>
-                        <li>ไปที่เมนู <strong>Replication Configuration</strong></li>
-                        <li>ติ๊กถูกที่ช่อง <span class="ui-btn">Enable this computer as a Replica server</span></li>
-                        <li>หัวข้อ Authentication เลือกระบบความปลอดภัย (แนะนำ <strong>Use Kerberos (HTTP) Port 80</strong> ถ้าระบบไม่ได้ต่อเน็ตเวิร์กภายนอก)</li>
-                        <li>หัวข้อ Authorization เลือก <strong>Allow replication from the specified servers</strong> > กด Add และใส่ IP ของเครื่องหลัก</li>
-                        <li>กด OK > *อย่าลืมไปตั้งค่า Windows Firewall ให้เปิด Port ให้ <strong>Hyper-V Replica HTTP Listener (TCP-In)</strong> ด้วย</li>
-                    </ol>
-                </div>
-            </details>
+        <section id="tab4" class="tab-pane">
+            <h2>🔌 4. แก้ปัญหา VM มองไม่เห็น Network</h2>
+            
+            <h3>1. ปิด VMQ (Virtual Machine Queue) <span class="highlight">ปัญหายอดฮิต</span></h3>
+            <p>ถ้า VM เน็ตหลุดสุ่มๆ (โดยเฉพาะการ์ดแลน Broadcom) ให้แก้ดังนี้:</p>
+            <ol class="steps">
+                <li>คลิกขวาที่ VM > <span class="ui-btn">Settings...</span></li>
+                <li>เมนู Network Adapter > <span class="ui-btn">Hardware Acceleration</span></li>
+                <li>ด้านขวามือ <strong>เอาเครื่องหมายถูกออก</strong> จาก <span class="ui-btn">Enable virtual machine queue</span></li>
+            </ol>
 
-            <details class="sub-details">
-                <summary class="sub-summary">Step 2: เริ่มส่งข้อมูล (ทำที่เครื่องหลัก)</summary>
-                <div class="sub-content">
-                    <ol class="steps">
-                        <li>เปิด Hyper-V Manager บนเครื่องหลัก > คลิกขวาที่ VM ที่ต้องการ > เลือก <span class="ui-btn">Enable Replication...</span></li>
-                        <li>หน้า Replica Server ให้พิมพ์ IP หรือชื่อของเครื่องสำรอง DR</li>
-                        <li>หน้า Choose Replication VHDs ให้เลือกเฉพาะ Drive ที่ต้องการ (บาง Drive เช่น Temp ไม่จำเป็นต้องส่งไป)</li>
-                        <li>หน้า Configure Replication Frequency เลือกว่าจะส่งข้อมูลทุกๆ <strong>30 วิ, 5 นาที หรือ 15 นาที</strong></li>
-                        <li>หน้า Initial Replication เลือกว่าจะส่งข้อมูลก้อนแรกผ่าน Network ทันทีเลยหรือไม่ > กด Finish ระบบจะเริ่มซิงค์ข้อมูลทันที</li>
-                    </ol>
-                </div>
-            </details>
-        </div>
-    </details>
+            <h3>2. การใส่ VLAN ID</h3>
+            <ul>
+                <li>ไปที่ Settings VM > Network Adapter > ติ๊ก <span class="ui-btn">Enable virtual LAN identification</span> แล้วใส่เลข VLAN ให้ตรงกับสวิตช์ขององค์กร</li>
+            </ul>
 
-    <details class="main-details">
-        <summary class="main-summary">🔌 4. แก้ปัญหา VM มองไม่เห็น Network</summary>
-        <div class="content">
-            <details class="sub-details">
-                <summary class="sub-summary">วิธีแก้ปัญหา VM หลุดบ่อย (ปิด VMQ)</summary>
-                <div class="sub-content">
-                    <p>ปัญหานี้พบบ่อยมากใน Server Enterprise บางรุ่นที่มีฟีเจอร์ Virtual Machine Queue ทำงานผิดปกติ</p>
-                    <ol class="steps">
-                        <li>ปิด VM (Shut Down) หรือทำตอนที่ระบบไม่มีคนใช้งาน</li>
-                        <li>เปิด Hyper-V Manager > คลิกขวาที่ VM ที่มีปัญหา > เลือก <span class="ui-btn">Settings...</span></li>
-                        <li>กางเมนู Network Adapter ออกมา > คลิกที่ <span class="ui-btn">Hardware Acceleration</span></li>
-                        <li>ด้านขวามือ ให้ <strong>เอาเครื่องหมายติ๊กถูกออก</strong> จากช่อง <span class="ui-btn">Enable virtual machine queue</span></li>
-                        <li>กด OK และเปิด VM ทดสอบดูอีกครั้ง</li>
-                    </ol>
-                </div>
-            </details>
+            <h3>3. MAC Address Spoofing</h3>
+            <ul>
+                <li>หาก VM รัน Docker/Kubernetes, Load Balance หรือ VPN ต้องกางเมนู Network Adapter ออกมาเลือก Advanced Features แล้วติ๊ก <span class="ui-btn">Enable MAC address spoofing</span></li>
+            </ul>
+        </section>
 
-            <details class="sub-details">
-                <summary class="sub-summary">วิธีตั้งค่า VLAN ID ให้กับ VM</summary>
-                <div class="sub-content">
-                    <ol class="steps">
-                        <li>เปิด Hyper-V Manager > คลิกขวาที่ VM > เลือก <span class="ui-btn">Settings...</span></li>
-                        <li>คลิกที่เมนู <strong>Network Adapter</strong> ด้านซ้าย</li>
-                        <li>ด้านขวามือในหมวด VLAN ID ให้ติ๊กถูกช่อง <span class="ui-btn">Enable virtual LAN identification</span></li>
-                        <li>พิมพ์ตัวเลข VLAN ID ขององค์กร (เช่น VLAN ของระบบกล้อง, ระบบเสียง, หรือแผนก) ในช่อง <strong>VLAN identifier</strong></li>
-                        <li>กด OK</li>
-                    </ol>
-                </div>
-            </details>
-        </div>
-    </details>
+        <section id="tab5" class="tab-pane">
+            <h2>🛢️ 5. ตั้งค่า VM สำหรับ Oracle Database</h2>
+            <p>การใช้ Hyper-V รัน Oracle (เช่น 19c) มีกฎเหล็กเพื่อป้องกันระบบล่มดังนี้:</p>
 
-    <details class="main-details">
-        <summary class="main-summary">🛢️ 5. ตั้งค่า VM สำหรับระบบ ฐานข้อมูล (Oracle)</summary>
-        <div class="content">
-            <details class="sub-details">
-                <summary class="sub-summary">Step 1: การตั้งค่า Fixed VHDX (ห้ามใช้ Dynamic)</summary>
-                <div class="sub-content">
-                    <p>Oracle Database ต้องการ I/O ดิสก์ที่นิ่งมาก การใช้ดิสก์แบบขยายเอง (Dynamic) จะทำให้ระบบล่มหรือหน่วง</p>
-                    <ol class="steps">
-                        <li>ตอนสร้างดิสก์ใหม่ หรือใน Hyper-V Manager เลือกแถบขวามือ <span class="ui-btn">New</span> > <strong>Hard Disk...</strong></li>
-                        <li>เลือก Format เป็น <strong>VHDX</strong></li>
-                        <li>หน้า Disk Type <strong>บังคับเลือก "Fixed size" เท่านั้น</strong></li>
-                        <li>ระบุชื่อและตำแหน่ง (ควรแยกไปอยู่ Drive SSD/NVMe)</li>
-                        <li>ระบุขนาดที่ต้องการล่วงหน้า (เช่น 100GB) สร้างเสร็จจะได้ไฟล์ขนาด 100GB ทันที</li>
-                    </ol>
-                </div>
-            </details>
+            <h3>1. การตั้งค่า Storage (Disk) <span class="badge badge-danger">บังคับทำ</span></h3>
+            <ul>
+                <li>Oracle ต้องการ I/O ดิสก์ที่นิ่งมาก <strong>ต้องสร้างไฟล์ VHDX เป็นแบบ "Fixed Size" เท่านั้น</strong> ห้ามใช้ Dynamically expanding (ดิสก์ขยายเอง) เด็ดขาด</li>
+                <li>ควรแยก Drive OS (C:) และ Drive ที่เก็บ Database Data (D:, E:) ออกจากกัน</li>
+            </ul>
 
-            <details class="sub-details">
-                <summary class="sub-summary">Step 2: การตั้งค่า Static RAM</summary>
-                <div class="sub-content">
-                    <ol class="steps">
-                        <li>คลิกขวาที่ VM > เลือก <span class="ui-btn">Settings...</span></li>
-                        <li>เลือกเมนู <strong>Memory</strong> ด้านซ้าย</li>
-                        <li>ช่อง <strong>Startup RAM</strong> ให้ใส่จำนวน RAM ที่ต้องการจัดสรรให้ DB (ขั้นต่ำ 4096 MB / แนะนำ 8192 MB ขึ้นไป)</li>
-                        <li><strong>เอาเครื่องหมายติ๊กถูกออก</strong> จากช่อง <span class="ui-btn">Enable Dynamic Memory</span></li>
-                        <li>กด OK เพื่อบังคับให้ VM จอง RAM จำนวนนี้ไว้ตลอดเวลา</li>
-                    </ol>
-                </div>
-            </details>
-        </div>
-    </details>
+            <h3>2. การตั้งค่า Memory (RAM) <span class="badge badge-danger">บังคับทำ</span></h3>
+            <ul>
+                <li>ไปที่ Settings > Memory</li>
+                <li><strong>เอาเครื่องหมายติ๊กถูกออก</strong> จากช่อง <span class="ui-btn">Enable Dynamic Memory</span></li>
+                <li>ใส่ Startup RAM คงที่ (เช่น 8192 MB) เพื่อให้ Oracle จองพื้นที่ SGA/PGA ได้อย่างเสถียร ไม่โดน Windows แย่ง RAM คืน</li>
+            </ul>
 
-    <details class="main-details">
-        <summary class="main-summary">🗄️ 6. Backup & DR Site สำหรับ Oracle (ฉบับฟรี)</summary>
-        <div class="content">
-            <div class="warning-box" style="margin-top: 0; margin-bottom: 15px;">
-                <strong>⚠️ สำคัญ:</strong> ห้ามใช้ Veeam/Windows Backup สั่ง Snapshot ถ่าย Backup VM ที่รัน Oracle อยู่โดยตรง (เสี่ยง Corrupt) ต้องสั่งทำ RMAN ลงเครื่องก่อนเสมอ!
+            <h3>3. CPU (vCPU)</h3>
+            <ul>
+                <li>ขั้นต่ำ 2 Core (แนะนำ 4-8 Core ขึ้นไปสำหรับระดับ Production)</li>
+            </ul>
+        </section>
+
+        <section id="tab6" class="tab-pane">
+            <h2>🛡️ 6. Backup Oracle (ฉบับฟรี)</h2>
+            <div class="warning-box" style="margin-top: 0;">
+                <strong>⚠️ สำคัญมาก:</strong> อย่าใช้ Veeam/Hyper-V สั่ง Snapshot แบ็คอัพ VM ที่รัน Oracle อยู่โดยตรง (เสี่ยง Corrupt) ต้องสั่งทำ RMAN Backup ลงไฟล์ภายใน VM ก่อนเสมอ!
             </div>
 
-            <details class="sub-details">
-                <summary class="sub-summary">วิธีที่ 1: การ Backup ด้วย RMAN (เครื่องมือฟรีของ Oracle)</summary>
-                <div class="sub-content">
-                    <ol class="steps">
-                        <li>เปิด Command Prompt / Terminal ใน OS ที่ลง Oracle</li>
-                        <li>พิมพ์คำสั่งเข้า RMAN: <code>rman target /</code></li>
-                        <li>ตั้งค่าให้ Backup Control File อัตโนมัติ: <code>CONFIGURE CONTROLFILE AUTOBACKUP ON;</code></li>
-                        <li>สั่ง Backup ฐานข้อมูลทั้งหมดพร้อม Archive Log: <code>BACKUP DATABASE PLUS ARCHIVELOG;</code></li>
-                        <li><strong>ทริค:</strong> เขียนคำสั่งเหล่านี้เซฟเป็นไฟล์ `.bat` หรือ `.sh` แล้วใช้ Task Scheduler/Cronjob สั่งรันทุกคืน (เช่น ตี 2) แล้วค่อยใช้ Veeam มาเก็บโฟลเดอร์ Backup นี้ไปอีกที</li>
-                    </ol>
-                </div>
-            </details>
+            <h3>RMAN (Recovery Manager) <span class="badge">แนะนำ</span></h3>
+            <p>เครื่องมือระดับ Enterprise ที่มีมาให้ฟรีใน Oracle ทุกรุ่น ทำ Hot Backup (แบ็คอัพตอนเปิดใช้งาน) ได้</p>
+            <pre><code># เข้าสู่ระบบ RMAN
+rman target /
 
-            <details class="sub-details">
-                <summary class="sub-summary">วิธีที่ 2: ทำ DR Site สำรองข้อมูลข้ามเครื่อง (Log Shipping)</summary>
-                <div class="sub-content">
-                    <p>ใช้ทดแทน Oracle Data Guard ที่ต้องเสียเงิน โดยการโยนไฟล์ Log ข้ามเครื่อง (ทำ Near Real-time)</p>
-                    <ol class="steps">
-                        <li>เตรียม Server อีกเครื่อง (Standby) ติดตั้ง Oracle OS/Version ให้เหมือนเครื่องหลัก (Primary) เป๊ะๆ</li>
-                        <li>เปิด <strong>ARCHIVELOG Mode</strong> บนเครื่องหลัก</li>
-                        <li>ตั้งค่า Network Share Folder ให้เครื่องหลักมองเห็นเครื่อง Standby</li>
-                        <li>เขียน Script (Batch/Python) คอยจับไฟล์ <code>.arc</code> (Archive log) ใหม่ๆ ในเครื่องหลัก ก๊อปปี้โยนไปไว้ใน Share Folder ของเครื่อง Standby ทุกๆ X นาที</li>
-                        <li>ที่เครื่อง Standby รัน Script สั่ง <code>RECOVER STANDBY DATABASE;</code> เพื่อเอา Log ที่ส่งมา เข้าไปอัปเดตข้อมูลให้ตรงกับเครื่องหลัก</li>
-                    </ol>
-                </div>
-            </details>
-        </div>
-    </details>
+# ตั้งค่าให้เซฟ Controlfile อัตโนมัติ
+CONFIGURE CONTROLFILE AUTOBACKUP ON;
+
+# สั่ง Backup Database และ Archive Log ทั้งหมด
+BACKUP DATABASE PLUS ARCHIVELOG;</code></pre>
+            <p><em>💡 แนะนำให้เขียน Script รันคำสั่งด้านบนทุกๆ คืน ตี 2 แล้วใช้ Veeam เก็บโฟลเดอร์ Backup นี้ไปอีกชั้นนึง</em></p>
+
+            <h3>Data Pump (expdp / impdp)</h3>
+            <p>ใช้สำหรับ Backup แบบ Logical คือเอาเฉพาะบาง Table, Schema หรือ Structure</p>
+            <pre><code># โยน Schema ออกเป็นไฟล์ .dmp
+expdp system/password schemas=HR directory=BACKUP_DIR dumpfile=hr_backup.dmp</code></pre>
+        </section>
+
+        <section id="tab7" class="tab-pane">
+            <h2>🔗 7. Replicate Oracle Database ฉบับฟรี</h2>
+            <p>แทนที่จะเสียเงินซื้อ Oracle Enterprise เพื่อใช้ Data Guard เราสามารถทำ DR Site ฟรีได้ด้วย 3 วิธีหลักนี้:</p>
+
+            <h3>วิธีที่ 1: Log Shipping (Manual Standby) <span class="badge">ยอดนิยมสุด</span></h3>
+            <p>เหมาะกับรุ่น Standard Edition อาศัยการโยนไฟล์ Log ข้ามเครื่อง (RPO ประมาณ 5-15 นาที)</p>
+            <ol class="steps">
+                <li><strong>เครื่องหลัก (Primary):</strong> สั่งเปิด <code>ALTER DATABASE ARCHIVELOG;</code></li>
+                <li><strong>เครื่องหลัก:</strong> เขียน Script (Batch) รันคำสั่ง <code>robocopy</code> ดึงไฟล์ Archive Log ใหม่ๆ ส่งไปโฟลเดอร์แชร์ของเครื่อง Standby ทุกๆ 5 นาที</li>
+                <li><strong>เครื่องสำรอง (Standby):</strong> ติดตั้ง Oracle และ Restore ข้อมูลก้อนแรกมาไว้ในสถานะ <code>MOUNT</code></li>
+                <li><strong>เครื่องสำรอง:</strong> เขียน Script ลูปเพื่อสั่ง <code>RECOVER AUTOMATIC STANDBY DATABASE;</code> ให้มันนำไฟล์ Log ที่เพิ่งได้รับมายัดเข้า Database ทันที</li>
+            </ol>
+
+            <h3>วิธีที่ 2: Oracle SEHA (High Availability)</h3>
+            <p>สำหรับ Oracle 19c Standard Edition 2 ขึ้นไป (ทดแทน RAC)</p>
+            <ol class="steps">
+                <li>สร้าง Shared Disk (เช่น ใช้ Shared VHDX ใน Hyper-V) ต่อเข้ากับ VM 2 เครื่อง</li>
+                <li>ติดตั้ง <strong>Oracle Grid Infrastructure</strong> ทั้ง 2 เครื่อง และคอนฟิกแบบ Failover Cluster</li>
+                <li>เก็บไฟล์ Database ไว้ตรงกลาง (Shared Disk)</li>
+                <li>เมื่อเครื่อง A พัง ระบบจะสลับไป Start ฐานข้อมูลที่เครื่อง B อัตโนมัติ (IP เดิมไม่เปลี่ยน)</li>
+            </ol>
+
+            <h3>วิธีที่ 3: Logical Replication (CDC)</h3>
+            <p>ใช้ Open Source Tools อย่าง <strong>SymmetricDS</strong> หรือ <strong>Debezium</strong> (Real-time)</p>
+            <ol class="steps">
+                <li>ติดตั้ง Agent ไว้ที่ทั้ง 2 เครื่อง</li>
+                <li>ตั้งค่าให้โปรแกรมดึงเฉพาะตาราง (Tables) ที่ต้องการซิงค์</li>
+                <li>ระบบจะจับการเปลี่ยนแปลง (Insert/Update) แล้วยิงไปอีกเครื่องแบบ Row-by-Row</li>
+                <li><strong>ข้อดี:</strong> เครื่องสำรองสามารถเปิดในสถานะ Read-Write ได้ และซิงค์ข้ามเวอร์ชัน Oracle ได้</li>
+            </ol>
+        </section>
+
+        <section id="tab8" class="tab-pane">
+            <h2>💻 8. PowerShell Commands (Cheat Sheet)</h2>
+            <pre><code># ดูสถานะ VM ทั้งหมดในเครื่อง
+Get-VM
+
+# ดูสถานะ Replication (DR Site)
+Get-VMReplication
+
+# เริ่มต้นเปิด VM ทั้งหมดที่โดนปิดอยู่
+Get-VM | where {$_.State -eq 'Off'} | Start-VM
+
+# ปิด VM อย่างปลอดภัย (Shutdown OS อย่างถูกต้อง)
+Stop-VM -Name "Oracle_DB" -Force
+
+# ตรวจสอบว่าไฟล์ VHDX สมบูรณ์หรือไม่
+Test-VHD -Path "D:\Hyper-V\VM01.vhdx"</code></pre>
+            
+            <div class="warning-box">
+                <strong>💡 ข้อแนะนำทิ้งท้าย:</strong> ไม่ควรเก็บ Snapshot (Checkpoint) ของ VM ทิ้งไว้นานเกิน 24 ชั่วโมง เพราะจะทำให้ไฟล์แตกแขนง กินพื้นที่ฮาร์ดดิสก์ และทำให้ I/O ของ Oracle ช้าลงอย่างหนักครับ
+            </div>
+        </section>
+
+    </main>
 </div>
+
+<script>
+    function openTab(evt, tabName) {
+        // ซ่อน Tab Content ทั้งหมด
+        var tabPanes = document.getElementsByClassName("tab-pane");
+        for (var i = 0; i < tabPanes.length; i++) {
+            tabPanes[i].classList.remove("active");
+        }
+
+        // เอาสีปุ่มที่ถูกกดออก
+        var navBtns = document.getElementsByClassName("nav-btn");
+        for (var i = 0; i < navBtns.length; i++) {
+            navBtns[i].classList.remove("active");
+        }
+
+        // แสดง Tab ที่เลือก และใส่สีปุ่มที่โดนกด
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+
+        // ถ้าย่อหน้าจออยู่บนมือถือ ให้เลื่อนหน้าจอลงมาตรงเนื้อหา
+        if(window.innerWidth <= 900) {
+            window.scrollTo({ top: document.querySelector('.main-content').offsetTop - 20, behavior: 'smooth' });
+        }
+    }
+</script>
 
 </body>
 </html>
