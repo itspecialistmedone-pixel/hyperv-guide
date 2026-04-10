@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyper-V & Oracle IT Manual</title>
+    <title>Hyper-V & Oracle IT Manual - Step by Step</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,6 +12,7 @@
             --bg-color: #f0f4f8;
             --text-dark: #2d3748;
             --text-light: #4a5568;
+            --accent: #e2e8f0;
         }
         
         * { box-sizing: border-box; }
@@ -26,10 +27,7 @@
             font-size: 16px;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .container { max-width: 850px; margin: 0 auto; }
 
         .header {
             text-align: center;
@@ -40,12 +38,11 @@
             margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0,86,179,0.2);
         }
-
         .header h1 { margin: 0; font-size: 2rem; line-height: 1.2; }
         .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 1rem; }
 
-        /* Accordion Style using Details & Summary */
-        details {
+        /* Main Accordion */
+        details.main-details {
             background: #ffffff;
             border-radius: 10px;
             margin-bottom: 15px;
@@ -53,101 +50,96 @@
             overflow: hidden;
             transition: all 0.3s ease;
         }
-
-        details[open] {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        summary {
+        details.main-details[open] { box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        
+        summary.main-summary {
             padding: 18px 20px;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 600;
             background-color: #ffffff;
             color: var(--primary);
             cursor: pointer;
-            list-style: none; /* Hide default arrow */
+            list-style: none;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-left: 5px solid var(--primary);
             user-select: none;
         }
-
-        summary::-webkit-details-marker { display: none; } /* Hide arrow in Safari */
-
-        /* เครื่องหมาย + และ - */
-        summary::after {
+        summary.main-summary::-webkit-details-marker { display: none; }
+        summary.main-summary::after {
             content: '+';
             font-size: 1.5rem;
             color: var(--primary);
             transition: transform 0.3s;
         }
-        details[open] summary::after {
+        details.main-details[open] > summary.main-summary::after {
             content: '−';
             transform: rotate(180deg);
         }
-        details[open] summary {
-            border-bottom: 1px solid #e2e8f0;
+        details.main-details[open] > summary.main-summary {
+            border-bottom: 1px solid var(--accent);
             background-color: #f8fafc;
         }
 
-        /* Content Inside Accordion */
-        .content {
-            padding: 20px;
-            color: var(--text-light);
-            animation: fadeIn 0.4s ease-in-out;
+        .content { padding: 20px; color: var(--text-light); animation: fadeIn 0.4s ease-in-out; }
+
+        /* Sub Accordion (Nested) */
+        details.sub-details {
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--accent);
+        }
+        summary.sub-summary {
+            padding: 12px 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+        summary.sub-summary::-webkit-details-marker { display: none; }
+        summary.sub-summary::before {
+            content: '▶';
+            font-size: 0.8rem;
+            margin-right: 10px;
+            color: var(--primary);
+            transition: transform 0.2s;
+        }
+        details.sub-details[open] > summary.sub-summary::before {
+            transform: rotate(90deg);
+        }
+        .sub-content {
+            padding: 15px;
+            border-top: 1px solid var(--accent);
+            background: #ffffff;
+            font-size: 0.95rem;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; transform: translateY(-5px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h3 { color: var(--text-dark); margin-top: 20px; font-size: 1.2rem; }
-        h3:first-child { margin-top: 0; }
-        
-        ul, ol { padding-left: 20px; margin-bottom: 15px; }
-        li { margin-bottom: 10px; }
+        ol.steps { padding-left: 20px; margin-bottom: 0; }
+        ol.steps li { margin-bottom: 12px; padding-left: 5px; }
+        ol.steps li::marker { font-weight: 600; color: var(--primary); }
         
         .highlight { font-weight: 600; color: #d9534f; }
-        
-        .badge {
-            display: inline-block;
-            background-color: #28a745;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 5px;
+        .ui-btn { 
+            background: #e2e8f0; color: #2d3748; padding: 2px 6px; 
+            border-radius: 4px; font-size: 0.85rem; border: 1px solid #cbd5e0;
         }
-        .badge-danger { background-color: #dc3545; }
-
         pre {
-            background-color: #2d3748;
-            color: #f8f8f2;
-            padding: 15px;
-            border-radius: 8px;
-            overflow-x: auto; /* ทำให้เลื่อนซ้ายขวาได้บนมือถือ */
-            font-family: 'Courier New', monospace;
-            font-size: 0.95rem;
+            background-color: #2d3748; color: #f8f8f2; padding: 15px;
+            border-radius: 8px; overflow-x: auto; font-family: monospace; font-size: 0.9rem;
         }
-
         .warning-box {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 15px 20px;
-            border-radius: 8px;
-            border-left: 5px solid #ffeeba;
-            margin-top: 10px;
-            font-size: 0.95rem;
-        }
-
-        /* Responsive Adjustments for Mobile */
-        @media (max-width: 600px) {
-            .header h1 { font-size: 1.6rem; }
-            summary { font-size: 1rem; padding: 15px; }
-            .content { padding: 15px; font-size: 0.95rem; }
+            background-color: #fff3cd; color: #856404; padding: 15px;
+            border-radius: 8px; border-left: 5px solid #ffeeba; margin-top: 15px; font-size: 0.9rem;
         }
     </style>
 </head>
@@ -156,123 +148,197 @@
 <div class="container">
     <div class="header">
         <h1>IT Admin Guide</h1>
-        <p>Hyper-V & Oracle Database (Mobile Ready)</p>
+        <p>คู่มือแบบ Step-by-Step: Hyper-V & Oracle Database</p>
     </div>
 
-    <details>
-        <summary>🛠️ 1. การติดตั้ง Hyper-V</summary>
+    <details class="main-details">
+        <summary class="main-summary">🛠️ 1. การติดตั้ง Hyper-V แบบละเอียด</summary>
         <div class="content">
-            <p>ตรวจสอบใน BIOS ว่าเปิด <strong>Virtualization (VT-x / AMD-V)</strong> แล้ว</p>
-            <ol>
-                <li>เปิด <strong>Server Manager</strong> > คลิก <strong>Add roles and features</strong></li>
-                <li>เลือก Role-based installation และติ๊กที่ช่อง <strong>Hyper-V</strong></li>
-                <li><strong>Virtual Switches:</strong> เลือก Network Card (NIC) ที่จะให้ VM ออกเน็ต</li>
-                <li><strong>Migration:</strong> ติ๊ก "Allow this server to send and receive live migrations..."</li>
-                <li><strong>Default Stores:</strong> กำหนดที่เก็บ VHDX <span class="highlight">(แนะนำ Drive อื่นที่ไม่ใช่ C:)</span></li>
-                <li>กด <strong>Install</strong> และ Restart เครื่อง 1 รอบ</li>
+            <p>ตรวจสอบใน BIOS ของ Server ว่าเปิด <strong>Virtualization (VT-x / AMD-V)</strong> เรียบร้อยแล้ว</p>
+            <ol class="steps">
+                <li>เปิด <span class="ui-btn">Server Manager</span> บน Windows Server</li>
+                <li>มุมขวาบนคลิก <span class="ui-btn">Manage</span> > เลือก <span class="ui-btn">Add roles and features</span></li>
+                <li>กด Next ไปเรื่อยๆ จนถึงหน้า <strong>Server Roles</strong> ให้ติ๊กถูกที่ช่อง <strong>Hyper-V</strong> > กด Add Features</li>
+                <li>หน้า <strong>Virtual Switches:</strong> เลือกว่าจะให้ VM ใช้การ์ดแลน (NIC) ใบไหนเพื่อออกเน็ต (หาก Server มีหลายพอร์ต ให้เลือกพอร์ตที่ต่อสายแลน External ไว้)</li>
+                <li>หน้า <strong>Migration:</strong> ติ๊กถูกที่ "Allow this server to send and receive live migrations..." (หากมีแผนทำ Cluster ในอนาคต)</li>
+                <li>หน้า <strong>Default Stores:</strong> สำคัญมาก! ให้เปลี่ยน Path ที่เก็บไฟล์ VHDX และ Configuration ไปไว้ที่ Drive อื่นที่ไม่ใช่ Drive C: (เช่น <code>D:\Hyper-V</code>)</li>
+                <li>หน้า Confirmation ติ๊กเลือก Restart destination server automatically > กด <span class="ui-btn">Install</span> (เครื่องจะรีสตาร์ท 1-2 ครั้ง)</li>
             </ol>
         </div>
     </details>
 
-    <details>
-        <summary>💾 2. การ Backup VM</summary>
+    <details class="main-details">
+        <summary class="main-summary">💾 2. วิธีการ Backup VM</summary>
         <div class="content">
-            <h3>วิธีที่ 1: Windows Server Backup (ฟรีในตัว)</h3>
-            <ol>
-                <li>ติดตั้ง Feature: <strong>Windows Server Backup</strong></li>
-                <li>เปิดโปรแกรม > เลือก Backup Schedule > Custom</li>
-                <li>Add Items > เลือกที่ Hyper-V > เลือก VM</li>
-                <li>กำหนดเวลาและ Destination (เช่น External HDD)</li>
-            </ol>
+            
+            <details class="sub-details">
+                <summary class="sub-summary">วิธีที่ 1: ใช้ Windows Server Backup (ฟรีในตัว)</summary>
+                <div class="sub-content">
+                    <ol class="steps">
+                        <li>เปิด Server Manager > Add roles and features > หน้า Features ติ๊กเลือก <span class="ui-btn">Windows Server Backup</span> > Install</li>
+                        <li>ไปที่ปุ่ม Start ค้นหาและเปิดโปรแกรม <span class="ui-btn">Windows Server Backup</span></li>
+                        <li>แถบ Action ด้านขวามือ คลิก <span class="ui-btn">Backup Schedule...</span></li>
+                        <li>หน้า Select Backup Configuration เลือก <strong>Custom</strong></li>
+                        <li>หน้า Select Items for Backup คลิก <span class="ui-btn">Add Items</span> > กางโฟลเดอร์ <strong>Hyper-V</strong> > ติ๊กเลือก VM ที่ต้องการ Backup</li>
+                        <li>กำหนดเวลา Backup (Specify Backup Time) แนะนำเป็นช่วงดึกที่ไม่มีการใช้งานระบบ</li>
+                        <li>เลือก Destination ให้เซฟลง <strong>Back up to a hard disk that is dedicated for backups</strong> (แนะนำสุด) หรือ Network Share</li>
+                        <li>ตรวจสอบความถูกต้องและกด <span class="ui-btn">Finish</span></li>
+                    </ol>
+                </div>
+            </details>
 
-            <h3>วิธีที่ 2: Veeam Community Edition <span class="badge">แนะนำที่สุด!</span></h3>
-            <ul>
-                <li><strong>จุดเด่น:</strong> เป็นโปรแกรมฟรีที่ทำ Item-level recovery (ดึงไฟล์ย่อยจาก VM ได้) และ Backup ได้ขณะที่ VM เปิดอยู่โดยไม่สะดุด</li>
-            </ul>
+            <details class="sub-details">
+                <summary class="sub-summary">วิธีที่ 2: ใช้ Veeam Community Edition (ฟรี / แนะนำ)</summary>
+                <div class="sub-content">
+                    <ol class="steps">
+                        <li>ติดตั้ง Veeam Backup & Replication Community Edition ให้เรียบร้อย</li>
+                        <li>เปิด Veeam Console ไปที่เมนู <span class="ui-btn">Backup Infrastructure</span> ด้านล่างซ้าย</li>
+                        <li>คลิกขวาที่ Managed Servers > <span class="ui-btn">Add Server</span> > เลือก <strong>Microsoft Hyper-V</strong></li>
+                        <li>ใส่ IP หรือ ชื่อของ Server เครื่องหลัก และระบุ Username/Password ของ Admin > กด Next จน Finish</li>
+                        <li>ไปที่เมนู <span class="ui-btn">Home</span> ด้านล่างซ้าย > คลิก <span class="ui-btn">Backup Job</span> (บน Ribbon) > เลือก Virtual machine</li>
+                        <li>ตั้งชื่อ Job > หน้า Virtual Machines กด <span class="ui-btn">Add...</span> แล้วเลือก VM ที่ต้องการ</li>
+                        <li>หน้า Storage เลือก Backup Repository ที่เตรียมไว้</li>
+                        <li>หน้า Schedule ตั้งเวลาให้ทำงานทุกวัน (Daily) > กด Apply และ Finish</li>
+                    </ol>
+                </div>
+            </details>
+
         </div>
     </details>
 
-    <details>
-        <summary>🔄 3. การทำ Replication (DR Site)</summary>
+    <details class="main-details">
+        <summary class="main-summary">🔄 3. การทำ Replication (DR Site)</summary>
         <div class="content">
-            <p>การทำสำเนา VM ไปอีกเครื่อง เผื่อเครื่องหลักพัง</p>
-            <h3>Step 1: ตั้งค่า Replica Broker (ทั้ง 2 เครื่อง)</h3>
-            <ol>
-                <li>Hyper-V Settings > <strong>Replication Configuration</strong></li>
-                <li>ติ๊ก <strong>Enable this computer as a Replica server</strong></li>
-                <li>เลือก Use Kerberos (HTTP) และ "Allow replication from any authenticated server"</li>
-            </ol>
-            <h3>Step 2: เริ่มทำ Replication</h3>
-            <ol>
-                <li>คลิกขวาที่ VM เครื่องต้นทาง > <strong>Enable Replication</strong></li>
-                <li>ใส่ชื่อ Server ปลายทาง และเลือก VHDX</li>
-                <li>ตั้งความถี่ (เช่น 5 นาที) > กด Finish</li>
-            </ol>
+            <p><strong>เงื่อนไข:</strong> ต้องมี Windows Server ที่ลง Hyper-V ไว้ 2 เครื่อง (เครื่องหลัก และ เครื่องสำรอง)</p>
+
+            <details class="sub-details">
+                <summary class="sub-summary">Step 1: ตั้งค่ารับข้อมูล (ทำที่เครื่องสำรอง DR)</summary>
+                <div class="sub-content">
+                    <ol class="steps">
+                        <li>เปิด Hyper-V Manager บนเครื่องสำรอง > คลิกเมนู <span class="ui-btn">Hyper-V Settings...</span> ด้านขวามือ</li>
+                        <li>ไปที่เมนู <strong>Replication Configuration</strong></li>
+                        <li>ติ๊กถูกที่ช่อง <span class="ui-btn">Enable this computer as a Replica server</span></li>
+                        <li>หัวข้อ Authentication เลือกระบบความปลอดภัย (แนะนำ <strong>Use Kerberos (HTTP) Port 80</strong> ถ้าระบบไม่ได้ต่อเน็ตเวิร์กภายนอก)</li>
+                        <li>หัวข้อ Authorization เลือก <strong>Allow replication from the specified servers</strong> > กด Add และใส่ IP ของเครื่องหลัก</li>
+                        <li>กด OK > *อย่าลืมไปตั้งค่า Windows Firewall ให้เปิด Port ให้ <strong>Hyper-V Replica HTTP Listener (TCP-In)</strong> ด้วย</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="sub-details">
+                <summary class="sub-summary">Step 2: เริ่มส่งข้อมูล (ทำที่เครื่องหลัก)</summary>
+                <div class="sub-content">
+                    <ol class="steps">
+                        <li>เปิด Hyper-V Manager บนเครื่องหลัก > คลิกขวาที่ VM ที่ต้องการ > เลือก <span class="ui-btn">Enable Replication...</span></li>
+                        <li>หน้า Replica Server ให้พิมพ์ IP หรือชื่อของเครื่องสำรอง DR</li>
+                        <li>หน้า Choose Replication VHDs ให้เลือกเฉพาะ Drive ที่ต้องการ (บาง Drive เช่น Temp ไม่จำเป็นต้องส่งไป)</li>
+                        <li>หน้า Configure Replication Frequency เลือกว่าจะส่งข้อมูลทุกๆ <strong>30 วิ, 5 นาที หรือ 15 นาที</strong></li>
+                        <li>หน้า Initial Replication เลือกว่าจะส่งข้อมูลก้อนแรกผ่าน Network ทันทีเลยหรือไม่ > กด Finish ระบบจะเริ่มซิงค์ข้อมูลทันที</li>
+                    </ol>
+                </div>
+            </details>
         </div>
     </details>
 
-    <details>
-        <summary>🔌 4. แก้ปัญหา VM มองไม่เห็น Network</summary>
+    <details class="main-details">
+        <summary class="main-summary">🔌 4. แก้ปัญหา VM มองไม่เห็น Network</summary>
         <div class="content">
-            <p>หากเครื่อง VM ไม่ออกเน็ต หรือหลุดบ่อย ให้เช็ค 3 จุดหลัก:</p>
-            <ul>
-                <li><strong>VLAN ID:</strong> หากใช้ VLAN ต้องไปที่ Settings VM > Network Adapter > ติ๊ก <strong>Enable virtual LAN identification</strong> และใส่เลข VLAN</li>
-                <li><strong>บั๊ก VMQ (สำคัญมาก):</strong> อาการเน็ตสุ่มหลุด วิธีแก้คือไปที่ Settings VM > Network Adapter > Hardware Acceleration > <strong>เอาติ๊กถูกที่ Enable virtual machine queue ออก</strong></li>
-                <li><strong>MAC Address Spoofing:</strong> หาก VM รัน Load Balance หรือ VPN ต้องเปิด Enable MAC address spoofing ใน Advanced Features</li>
-            </ul>
+            <details class="sub-details">
+                <summary class="sub-summary">วิธีแก้ปัญหา VM หลุดบ่อย (ปิด VMQ)</summary>
+                <div class="sub-content">
+                    <p>ปัญหานี้พบบ่อยมากใน Server Enterprise บางรุ่นที่มีฟีเจอร์ Virtual Machine Queue ทำงานผิดปกติ</p>
+                    <ol class="steps">
+                        <li>ปิด VM (Shut Down) หรือทำตอนที่ระบบไม่มีคนใช้งาน</li>
+                        <li>เปิด Hyper-V Manager > คลิกขวาที่ VM ที่มีปัญหา > เลือก <span class="ui-btn">Settings...</span></li>
+                        <li>กางเมนู Network Adapter ออกมา > คลิกที่ <span class="ui-btn">Hardware Acceleration</span></li>
+                        <li>ด้านขวามือ ให้ <strong>เอาเครื่องหมายติ๊กถูกออก</strong> จากช่อง <span class="ui-btn">Enable virtual machine queue</span></li>
+                        <li>กด OK และเปิด VM ทดสอบดูอีกครั้ง</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="sub-details">
+                <summary class="sub-summary">วิธีตั้งค่า VLAN ID ให้กับ VM</summary>
+                <div class="sub-content">
+                    <ol class="steps">
+                        <li>เปิด Hyper-V Manager > คลิกขวาที่ VM > เลือก <span class="ui-btn">Settings...</span></li>
+                        <li>คลิกที่เมนู <strong>Network Adapter</strong> ด้านซ้าย</li>
+                        <li>ด้านขวามือในหมวด VLAN ID ให้ติ๊กถูกช่อง <span class="ui-btn">Enable virtual LAN identification</span></li>
+                        <li>พิมพ์ตัวเลข VLAN ID ขององค์กร (เช่น VLAN ของระบบกล้อง, ระบบเสียง, หรือแผนก) ในช่อง <strong>VLAN identifier</strong></li>
+                        <li>กด OK</li>
+                    </ol>
+                </div>
+            </details>
         </div>
     </details>
 
-    <details>
-        <summary>🛢️ 5. สเปค VM สำหรับ Oracle Database</summary>
+    <details class="main-details">
+        <summary class="main-summary">🛢️ 5. ตั้งค่า VM สำหรับระบบ ฐานข้อมูล (Oracle)</summary>
         <div class="content">
-            <p>กฎเหล็กสำหรับการรัน Oracle 19c บน Hyper-V:</p>
-            <ul>
-                <li><strong>CPU:</strong> 2-4 vCPU ขึ้นไป</li>
-                <li><strong>RAM:</strong> ขั้นต่ำ 4-8 GB <br><span class="badge badge-danger">ห้ามใช้ Dynamic Memory</span> ให้ตั้งเป็น Static RAM เพื่อให้ Oracle จองพื้นที่ Memory ได้เสถียร</li>
-                <li><strong>Storage:</strong> แยก Drive OS และ Database <br><span class="badge badge-danger">ต้องใช้ VHDX แบบ Fixed Size</span> ห้ามใช้ Dynamically expanding เพื่อรักษาความเร็ว I/O ป้องกันระบบช้า</li>
-            </ul>
+            <details class="sub-details">
+                <summary class="sub-summary">Step 1: การตั้งค่า Fixed VHDX (ห้ามใช้ Dynamic)</summary>
+                <div class="sub-content">
+                    <p>Oracle Database ต้องการ I/O ดิสก์ที่นิ่งมาก การใช้ดิสก์แบบขยายเอง (Dynamic) จะทำให้ระบบล่มหรือหน่วง</p>
+                    <ol class="steps">
+                        <li>ตอนสร้างดิสก์ใหม่ หรือใน Hyper-V Manager เลือกแถบขวามือ <span class="ui-btn">New</span> > <strong>Hard Disk...</strong></li>
+                        <li>เลือก Format เป็น <strong>VHDX</strong></li>
+                        <li>หน้า Disk Type <strong>บังคับเลือก "Fixed size" เท่านั้น</strong></li>
+                        <li>ระบุชื่อและตำแหน่ง (ควรแยกไปอยู่ Drive SSD/NVMe)</li>
+                        <li>ระบุขนาดที่ต้องการล่วงหน้า (เช่น 100GB) สร้างเสร็จจะได้ไฟล์ขนาด 100GB ทันที</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="sub-details">
+                <summary class="sub-summary">Step 2: การตั้งค่า Static RAM</summary>
+                <div class="sub-content">
+                    <ol class="steps">
+                        <li>คลิกขวาที่ VM > เลือก <span class="ui-btn">Settings...</span></li>
+                        <li>เลือกเมนู <strong>Memory</strong> ด้านซ้าย</li>
+                        <li>ช่อง <strong>Startup RAM</strong> ให้ใส่จำนวน RAM ที่ต้องการจัดสรรให้ DB (ขั้นต่ำ 4096 MB / แนะนำ 8192 MB ขึ้นไป)</li>
+                        <li><strong>เอาเครื่องหมายติ๊กถูกออก</strong> จากช่อง <span class="ui-btn">Enable Dynamic Memory</span></li>
+                        <li>กด OK เพื่อบังคับให้ VM จอง RAM จำนวนนี้ไว้ตลอดเวลา</li>
+                    </ol>
+                </div>
+            </details>
         </div>
     </details>
 
-    <details>
-        <summary>🗄️ 6. Backup & Replicate Oracle (ฉบับฟรี)</summary>
+    <details class="main-details">
+        <summary class="main-summary">🗄️ 6. Backup & DR Site สำหรับ Oracle (ฉบับฟรี)</summary>
         <div class="content">
-            <h3>การ Backup Oracle</h3>
-            <ul>
-                <li><strong>RMAN <span class="badge">แนะนำ</span>:</strong> Tool ฟรีของ Oracle Backup ได้ขณะเปิดระบบ (Hot Backup)</li>
-                <li><strong>Data Pump (expdp):</strong> สำหรับ Backup ดึงเฉพาะบาง Table/Schema</li>
-            </ul>
-            <div class="warning-box">
-                <strong>⚠️ ระวัง:</strong> อย่าใช้ Veeam Snapshot ตัว Database โดยตรง อาจทำให้ไฟล์ Corrupt ควรให้ RMAN แบ็คอัพลงโฟลเดอร์ก่อน แล้วค่อยใช้ Veeam ก๊อปปี้ไฟล์นั้นไป
+            <div class="warning-box" style="margin-top: 0; margin-bottom: 15px;">
+                <strong>⚠️ สำคัญ:</strong> ห้ามใช้ Veeam/Windows Backup สั่ง Snapshot ถ่าย Backup VM ที่รัน Oracle อยู่โดยตรง (เสี่ยง Corrupt) ต้องสั่งทำ RMAN ลงเครื่องก่อนเสมอ!
             </div>
 
-            <h3>การทำ DR Site (ทดแทน Data Guard)</h3>
-            <ul>
-                <li><strong>Hyper-V Replica:</strong> ง่ายสุด แต่ตอนเปิดใช้งานฝั่ง DR อาจต้องสั่ง Recover Database นิดหน่อย</li>
-                <li><strong>Log Shipping Script:</strong> เขียน Script โยนไฟล์ Archive Logs ไปอีกเครื่อง แล้วสั่ง Apply อัตโนมัติ (คนใช้ Standard Edition นิยมสุด)</li>
-            </ul>
+            <details class="sub-details">
+                <summary class="sub-summary">วิธีที่ 1: การ Backup ด้วย RMAN (เครื่องมือฟรีของ Oracle)</summary>
+                <div class="sub-content">
+                    <ol class="steps">
+                        <li>เปิด Command Prompt / Terminal ใน OS ที่ลง Oracle</li>
+                        <li>พิมพ์คำสั่งเข้า RMAN: <code>rman target /</code></li>
+                        <li>ตั้งค่าให้ Backup Control File อัตโนมัติ: <code>CONFIGURE CONTROLFILE AUTOBACKUP ON;</code></li>
+                        <li>สั่ง Backup ฐานข้อมูลทั้งหมดพร้อม Archive Log: <code>BACKUP DATABASE PLUS ARCHIVELOG;</code></li>
+                        <li><strong>ทริค:</strong> เขียนคำสั่งเหล่านี้เซฟเป็นไฟล์ `.bat` หรือ `.sh` แล้วใช้ Task Scheduler/Cronjob สั่งรันทุกคืน (เช่น ตี 2) แล้วค่อยใช้ Veeam มาเก็บโฟลเดอร์ Backup นี้ไปอีกที</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="sub-details">
+                <summary class="sub-summary">วิธีที่ 2: ทำ DR Site สำรองข้อมูลข้ามเครื่อง (Log Shipping)</summary>
+                <div class="sub-content">
+                    <p>ใช้ทดแทน Oracle Data Guard ที่ต้องเสียเงิน โดยการโยนไฟล์ Log ข้ามเครื่อง (ทำ Near Real-time)</p>
+                    <ol class="steps">
+                        <li>เตรียม Server อีกเครื่อง (Standby) ติดตั้ง Oracle OS/Version ให้เหมือนเครื่องหลัก (Primary) เป๊ะๆ</li>
+                        <li>เปิด <strong>ARCHIVELOG Mode</strong> บนเครื่องหลัก</li>
+                        <li>ตั้งค่า Network Share Folder ให้เครื่องหลักมองเห็นเครื่อง Standby</li>
+                        <li>เขียน Script (Batch/Python) คอยจับไฟล์ <code>.arc</code> (Archive log) ใหม่ๆ ในเครื่องหลัก ก๊อปปี้โยนไปไว้ใน Share Folder ของเครื่อง Standby ทุกๆ X นาที</li>
+                        <li>ที่เครื่อง Standby รัน Script สั่ง <code>RECOVER STANDBY DATABASE;</code> เพื่อเอา Log ที่ส่งมา เข้าไปอัปเดตข้อมูลให้ตรงกับเครื่องหลัก</li>
+                    </ol>
+                </div>
+            </details>
         </div>
     </details>
-
-    <details>
-        <summary>💻 7. PowerShell Cheat Sheet</summary>
-        <div class="content">
-<pre><code># ดูสถานะ VM ทั้งหมด
-Get-VM
-
-# เช็คสถานะ Replication
-Get-VMReplication
-
-# Start VM ที่ปิดอยู่ทั้งหมด
-Get-VM | where {$_.State -eq 'Off'} | Start-VM</code></pre>
-        </div>
-    </details>
-
-    <div class="warning-box" style="margin-top: 20px;">
-        <strong>💡 Best Practices ทั่วไป:</strong> ไม่ควรเก็บ Snapshot/Checkpoint ของ VM ทิ้งไว้นานเกิน 24-48 ชม. เพราะจะกินพื้นที่ดิสก์และทำให้ระบบหน่วงครับ
-    </div>
-
 </div>
 
 </body>
