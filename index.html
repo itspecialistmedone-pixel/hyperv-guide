@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyper-V Ultimate Guide</title>
+    <title>Hyper-V Ultimate Guide & Troubleshooting</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -80,6 +80,14 @@
             font-size: 0.9rem;
             font-weight: 600;
         }
+        .badge-danger {
+            background-color: #dc3545;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
         pre {
             background-color: #2d3748;
             color: #f8f8f2;
@@ -104,7 +112,7 @@
 <div class="container">
     <div class="header">
         <h1>Hyper-V Ultimate Guide</h1>
-        <p>คู่มือฉบับสมบูรณ์: การติดตั้ง, Backup และ Replication</p>
+        <p>คู่มือฉบับสมบูรณ์: การติดตั้ง, Backup, Replication และ Troubleshooting</p>
     </div>
 
     <div class="card">
@@ -187,8 +195,31 @@ Get-VM | where {$_.State -eq 'Off'} | Start-VM
 Test-VHD -Path "D:\Hyper-V\VM01.vhdx"</code></pre>
     </div>
 
+    <div class="card">
+        <h2>🔌 5. การแก้ปัญหา "VM มองไม่เห็น Network"</h2>
+        <p>หากเครื่อง VM ไม่ได้รับ IP หรือออกเน็ตไม่ได้ ให้เช็ค 4 จุดนี้:</p>
+        <ul>
+            <li><strong>Virtual Switch Type:</strong> ตรวจสอบว่าเลือกใช้ External Switch และผูกกับการ์ดแลน (NIC) ถูกใบ</li>
+            <li><strong>VLAN ID:</strong> หากระบบเน็ตเวิร์กขององค์กรมีการทำ VLAN ต้องเข้าไปที่ Settings ของ VM > Network Adapter > ติ๊ก <strong>Enable virtual LAN identification</strong> และใส่เลข VLAN ให้ถูกต้อง</li>
+            <li><strong>VMQ (Virtual Machine Queue) Bug:</strong> <span class="highlight">(เจอบ่อยมากใน Server บางรุ่น)</span> อาการคือเน็ตหลุดสุ่มๆ วิธีแก้: ไปที่ Settings VM > Network Adapter > Hardware Acceleration > <strong>ปิด/เอาติ๊กถูกที่ Enable virtual machine queue ออก</strong></li>
+            <li><strong>MAC Address Spoofing:</strong> หาก VM นั้นทำหน้าที่เป็น Load Balancer หรือ VPN ต้องเข้าไปเปิด <strong>Enable MAC address spoofing</strong> ใน Advanced Features</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>🛢️ 6. แนวทางการตั้งค่า VM สำหรับ Oracle Database</h2>
+        <p>การนำ Hyper-V มารัน Database ระดับ Enterprise (เช่น Oracle 19c) มีกฎเหล็กเพื่อป้องกันระบบล่มดังนี้:</p>
+        <ul>
+            <li><strong>CPU:</strong> ขั้นต่ำ 2 vCPU (แนะนำ 4 vCPU ขึ้นไปสำหรับ Production)</li>
+            <li><strong>RAM:</strong> ขั้นต่ำ 4 - 8 GB 
+                <br><span class="badge-danger">⚠️ สำคัญ</span> <strong>ห้ามใช้ Dynamic Memory</strong> ให้ตั้งเป็น RAM แบบ Fixed (ตายตัว) เพื่อให้ Oracle จองพื้นที่ SGA/PGA ได้เสถียร</li>
+            <li><strong>Storage (VHDX):</strong> ควรแยก Drive ระหว่าง OS และ Database Data 
+                <br><span class="badge-danger">⚠️ สำคัญ</span> ต้องสร้างไฟล์ VHDX เป็นแบบ <strong>"Fixed Size" เท่านั้น</strong> ห้ามใช้ Dynamically expanding เพื่อรักษาความเร็ว I/O ของดิสก์ให้สูงสุด</li>
+        </ul>
+    </div>
+
     <div class="warning-box">
-        <strong>💡 ข้อควรระวัง (Best Practices)</strong>
+        <strong>💡 ข้อควรระวัง (Best Practices) ทั่วไป</strong>
         <ul style="margin-top: 10px; margin-bottom: 0;">
             <li><strong>Memory:</strong> Server สำคัญควรใช้ Startup RAM แบบคงที่ (Fixed) ไม่ใช้ Dynamic</li>
             <li><strong>Checkpoints:</strong> ไม่ควรเก็บ Snapshot ไว้นานเกิน 24-48 ชม. เพราะจะกินพื้นที่และทำให้เครื่องช้า</li>
