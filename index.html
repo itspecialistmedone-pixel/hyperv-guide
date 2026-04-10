@@ -3,288 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyper-V & Oracle IT Manual</title>
+    <title>Hyper-V & Oracle IT Manual - Pro Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0056b3;
-            --primary-dark: #004494;
-            --bg-color: #f0f4f8;
-            --text-dark: #2d3748;
-            --text-light: #4a5568;
-            --accent: #e2e8f0;
-            --active-bg: #ebf4ff;
+            --primary: #0056b3; --primary-dark: #004494; --bg-color: #f0f4f8;
+            --text-dark: #2d3748; --text-light: #4a5568; --accent: #e2e8f0;
+            --active-bg: #ebf4ff; --danger: #dc3545; --warning: #ffc107;
         }
-        
         * { box-sizing: border-box; }
-        
-        body {
-            font-family: 'Prompt', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            font-size: 16px;
-        }
-
-        .header {
-            text-align: center;
-            padding: 30px 15px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,86,179,0.2);
-        }
-
-        .header h1 { margin: 0; font-size: 2.2rem; line-height: 1.2; }
-        .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 1.1rem; }
-
-        /* Layout Container */
+        body { font-family: 'Prompt', sans-serif; background-color: var(--bg-color); color: var(--text-dark); line-height: 1.6; margin: 0; padding: 20px; font-size: 16px; }
+        .header { text-align: center; padding: 30px 15px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-radius: 12px; margin-bottom: 20px; }
         .layout-wrapper { display: flex; gap: 20px; max-width: 1200px; margin: 0 auto; align-items: flex-start; }
-
-        /* Sidebar (Left) */
-        .sidebar {
-            flex: 0 0 300px; background: #ffffff; border-radius: 12px; padding: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: sticky; top: 20px;
-        }
-
-        .nav-btn {
-            display: block; width: 100%; text-align: left; background: transparent; border: none;
-            padding: 15px 20px; margin-bottom: 5px; font-family: 'Prompt', sans-serif; font-size: 1rem;
-            font-weight: 600; color: var(--text-dark); border-radius: 8px; cursor: pointer;
-            transition: all 0.3s ease; border-left: 4px solid transparent;
-        }
-        .nav-btn:hover { background-color: var(--accent); }
+        .sidebar { flex: 0 0 300px; background: #ffffff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: sticky; top: 20px; }
+        .nav-btn { display: block; width: 100%; text-align: left; background: transparent; border: none; padding: 15px 20px; margin-bottom: 5px; font-weight: 600; cursor: pointer; border-radius: 8px; border-left: 4px solid transparent; transition: 0.3s; }
         .nav-btn.active { background-color: var(--active-bg); color: var(--primary); border-left: 4px solid var(--primary); }
-
-        /* Main Content (Right) */
-        .main-content {
-            flex: 1; background: #ffffff; border-radius: 12px; padding: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); min-height: 60vh;
-        }
-
-        .tab-pane { display: none; animation: fadeIn 0.4s ease-in-out; }
-        .tab-pane.active { display: block; }
-
+        .main-content { flex: 1; background: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .tab-pane { display: none; } .tab-pane.active { display: block; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Sub Accordion Style for Steps */
-        details.sub-details { background: #f8fafc; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--accent); }
-        summary.sub-summary {
-            padding: 15px; font-size: 1.05rem; font-weight: 600; color: var(--text-dark);
-            cursor: pointer; list-style: none; display: flex; align-items: center; background: #f1f5f9; border-radius: 8px;
-        }
-        summary.sub-summary::-webkit-details-marker { display: none; }
-        summary.sub-summary::before { content: '▶'; font-size: 0.8rem; margin-right: 10px; color: var(--primary); transition: transform 0.2s; }
-        details.sub-details[open] > summary.sub-summary::before { transform: rotate(90deg); }
-        details.sub-details[open] > summary.sub-summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: 1px solid var(--accent); }
-        .sub-content { padding: 20px; background: #ffffff; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
-
-        /* Typography & Elements */
-        h2 { color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
-        h3 { color: var(--text-dark); margin-top: 25px; }
-        ul, ol { padding-left: 20px; margin-bottom: 15px; }
-        li { margin-bottom: 10px; }
-        ol.steps li::marker { font-weight: 600; color: var(--primary); }
         
-        .highlight { font-weight: 600; color: #d9534f; }
-        .ui-btn { background: var(--accent); color: var(--text-dark); padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; border: 1px solid #cbd5e0; font-family: monospace;}
-        .badge { display: inline-block; background-color: #28a745; color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; }
-        .badge-danger { background-color: #dc3545; }
-        .badge-warning { background-color: #ffc107; color: #212529; }
-        .badge-info { background-color: #17a2b8; }
-        pre { background-color: #2d3748; color: #f8f8f2; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: monospace; font-size: 0.95rem; line-height: 1.4;}
-        .warning-box { background-color: #fff3cd; color: #856404; padding: 20px; border-radius: 8px; border-left: 6px solid #ffeeba; margin-top: 20px; font-size: 0.95rem; }
-        .recommendation-box { background: linear-gradient(to right, #f0f9ff, #e0f2fe); border: 1px solid #bae6fd; padding: 20px; border-radius: 8px; margin-top: 30px; }
-
-        /* Responsive Design */
-        @media (max-width: 900px) {
-            .layout-wrapper { flex-direction: column; }
-            .sidebar { flex: auto; width: 100%; position: relative; top: 0; display: flex; flex-wrap: wrap; gap: 5px; }
-            .nav-btn { flex: 1 1 48%; padding: 10px 15px; font-size: 0.9rem; text-align: center; border-left: none; border-bottom: 4px solid transparent; }
-            .nav-btn.active { border-left: none; border-bottom: 4px solid var(--primary); }
-        }
-        @media (max-width: 600px) { .nav-btn { flex: 1 1 100%; } }
+        /* Step styles */
+        details.sub-details { background: #f8fafc; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--accent); }
+        summary.sub-summary { padding: 15px; font-weight: 600; cursor: pointer; background: #f1f5f9; border-radius: 8px; display: flex; align-items: center; }
+        summary.sub-summary::before { content: '▶'; font-size: 0.8rem; margin-right: 10px; color: var(--primary); transition: 0.2s; }
+        details[open] > summary.sub-summary::before { transform: rotate(90deg); }
+        .sub-content { padding: 20px; background: #ffffff; }
+        
+        pre { background-color: #2d3748; color: #f8f8f2; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: monospace; }
+        .warning-box { background-color: #fff3cd; color: #856404; padding: 20px; border-radius: 8px; border-left: 6px solid var(--warning); margin-top: 20px; }
+        .critical-box { background-color: #fde8e8; color: #9b1c1c; padding: 20px; border-radius: 8px; border-left: 6px solid var(--danger); margin-top: 20px; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; color: white; font-weight: bold; }
+        .badge-step { background: var(--primary); }
+        
+        @media (max-width: 900px) { .layout-wrapper { flex-direction: column; } .sidebar { width: 100%; position: relative; display: flex; flex-wrap: wrap; } .nav-btn { flex: 1 1 48%; } }
     </style>
 </head>
 <body>
 
-<div class="header" style="max-width: 1200px; margin: 0 auto 20px auto;">
-    <h1>IT Admin Guide</h1>
-    <p>Hyper-V & Oracle Database (Enterprise Free Edition)</p>
+<div class="header">
+    <h1>IT Admin Guide: High Availability</h1>
+    <p>Oracle Database & Hyper-V Management System</p>
 </div>
 
 <div class="layout-wrapper">
     <nav class="sidebar">
         <button class="nav-btn active" onclick="openTab(event, 'tab1')">🛠️ 1. ติดตั้ง Hyper-V</button>
         <button class="nav-btn" onclick="openTab(event, 'tab2')">💾 2. การ Backup VM</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab3')">🔄 3. DR Site (VM Replication)</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab4')">🔌 4. แก้ปัญหา Network</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab5')">🛢️ 5. สเปค VM (Oracle)</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab6')">🛡️ 6. Backup Oracle (ฟรี)</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab7')">🔗 7. Replicate Oracle <span class="badge badge-warning">เจาะลึก</span></button>
-        <button class="nav-btn" onclick="openTab(event, 'tab8')">💻 8. PowerShell Commands</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab7')">🔗 3. Replicate Oracle (Deep Dive)</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab8')">💻 4. PowerShell Cheat Sheet</button>
     </nav>
 
     <main class="main-content">
         <section id="tab1" class="tab-pane active">
-            <h2>🛠️ 1. การติดตั้ง Hyper-V แบบละเอียด</h2>
-            <p>ตรวจสอบใน BIOS ของ Server ว่าเปิด <strong>Virtualization (VT-x / AMD-V)</strong> เรียบร้อยแล้ว</p>
-            <ol class="steps">
-                <li>เปิด <span class="ui-btn">Server Manager</span> บน Windows Server</li>
-                <li>มุมขวาบนคลิก <span class="ui-btn">Manage</span> > เลือก <span class="ui-btn">Add roles and features</span></li>
-                <li>กด Next จนถึงหน้า <strong>Server Roles</strong> ติ๊กถูกที่ช่อง <strong>Hyper-V</strong></li>
-                <li>หน้า <strong>Virtual Switches:</strong> เลือก Network Card (NIC) ที่จะใช้ออกเน็ต</li>
-                <li>หน้า <strong>Default Stores:</strong> สำคัญมาก! เปลี่ยน Path เก็บ VHDX ไปไว้ Drive อื่นที่ไม่ใช่ C:</li>
-                <li>กด <span class="ui-btn">Install</span> และ Restart เครื่อง 1 รอบ</li>
-            </ol>
+            <h2>🛠️ 1. ติดตั้ง Hyper-V</h2>
+            <p>ติดตั้งผ่าน Server Manager > Add Roles and Features > Hyper-V</p>
         </section>
 
         <section id="tab2" class="tab-pane">
-            <h2>💾 2. วิธีการ Backup VM</h2>
-            <h3>วิธีใช้ Veeam Community Edition <span class="badge">แนะนำที่สุด</span></h3>
-            <ul>
-                <li>ติดตั้ง <span class="ui-btn">Veeam Backup & Replication</span> (ตัวฟรี)</li>
-                <li>เพิ่ม Hyper-V Server เข้าไปในระบบ</li>
-                <li>สร้าง Backup Job และเลือก VM ที่ต้องการ แนะนำให้เปิดฟีเจอร์ <strong>Application-aware processing</strong> เพื่อให้ Backup ทำงานร่วมกับ Database ภายใน VM ได้สมบูรณ์</li>
-            </ul>
-        </section>
-
-        <section id="tab3" class="tab-pane">
-            <h2>🔄 3. การทำ Replication (DR Site ระดับ VM)</h2>
-            <p>โยน VM ไปสแตนด์บายที่ Server อีกเครื่อง (วิธีนี้ง่ายสุด แต่อาจมี Downtime ตอนเปิดเครื่องใหม่)</p>
-            <ol class="steps">
-                <li>ฝั่งรับ: เปิด Hyper-V Settings > <strong>Replication Configuration</strong> > ติ๊ก <span class="ui-btn">Enable this computer as a Replica server</span></li>
-                <li>ฝั่งส่ง: คลิกขวาที่ VM > <span class="ui-btn">Enable Replication...</span> > ใส่ IP เครื่องสำรอง</li>
-                <li>ตั้งความถี่ (เช่น 5 นาที) แล้วกด Finish</li>
-            </ol>
-        </section>
-
-        <section id="tab4" class="tab-pane">
-            <h2>🔌 4. แก้ปัญหา VM มองไม่เห็น Network</h2>
-            <p><strong>ปัญหาเน็ตหลุดสุ่มๆ (ปิด VMQ):</strong> คลิกขวา VM > Settings > Network Adapter > Hardware Acceleration > <strong>เอาติ๊กออก</strong> จาก <span class="ui-btn">Enable virtual machine queue</span></p>
-        </section>
-
-        <section id="tab5" class="tab-pane">
-            <h2>🛢️ 5. ตั้งค่า VM สำหรับ Oracle Database</h2>
-            <ul>
-                <li><strong>Disk:</strong> ต้องใช้ VHDX แบบ <span class="badge badge-danger">Fixed Size</span> เท่านั้น ห้ามขยายเอง</li>
-                <li><strong>RAM:</strong> ห้ามติ๊ก <span class="ui-btn">Enable Dynamic Memory</span> ให้ใช้ Startup RAM คงที่ (เช่น 8GB)</li>
-            </ul>
-        </section>
-
-        <section id="tab6" class="tab-pane">
-            <h2>🛡️ 6. Backup Oracle (ฉบับฟรี)</h2>
-            <div class="warning-box" style="margin-top: 0;"><strong>⚠️ ระวัง:</strong> ต้องสั่งรัน RMAN Backup ลงไฟล์ภายใน VM ก่อนเสมอ ห้ามให้ Veeam Snapshot VM ที่รัน Oracle โดยตรง เพราะไฟล์จะ Corrupt</div>
+            <h2>💾 2. Backup VM</h2>
+            <p>ใช้ Veeam Community Edition สำหรับการ Backup ระดับ Image</p>
         </section>
 
         <section id="tab7" class="tab-pane">
-            <h2>🔗 7. เจาะลึกวิธี Replicate Oracle Database (ไม่มี Data Guard)</h2>
-            <p>สำหรับองค์กรที่ใช้ Oracle Standard Edition และต้องการทำ DR Site (Disaster Recovery) หรือซิงค์ข้อมูล นี่คือ 3 วิธีที่ดีที่สุด พร้อมขั้นตอนการทำครับ</p>
-
-            <details class="sub-details">
-                <summary class="sub-summary">วิธีที่ 1: Log Shipping (Manual Standby) <span class="badge" style="margin-left:10px;">ประหยัดสุด</span></summary>
+            <h2>🔗 3. เจาะลึกการทำ Replicate Oracle (ฉบับสมบูรณ์)</h2>
+            
+            <details class="sub-details" open>
+                <summary class="sub-summary">วิธีที่ 1: Log Shipping (Manual Standby) - ขั้นตอนละเอียด</summary>
                 <div class="sub-content">
-                    <p><strong>คอนเซปต์:</strong> เครื่องหลักสร้างไฟล์ Archive Log อัตโนมัติ -> เขียน Script (เช่น Python หรือ Batch) ก๊อปปี้ไฟล์ไปวางเครื่องสำรอง -> เครื่องสำรองดึงไฟล์เข้าไปอัปเดต (RPO ข้อมูลหายช่วง 5-15 นาที)</p>
-                    <ol class="steps">
-                        <li><strong>[Primary] เปิดโหมดจัดเก็บ Log:</strong> 
-                            <pre><code>SQL> SHUTDOWN IMMEDIATE;
-SQL> STARTUP MOUNT;
-SQL> ALTER DATABASE ARCHIVELOG;
-SQL> ALTER DATABASE OPEN;</code></pre>
+                    <div class="critical-box">
+                        <strong>🚨 ข้อควรระวังสูงสุด (Archive Log Management)</strong>
+                        <ul>
+                            <li><strong>ORA-00257 (พื้นที่เต็ม):</strong> หาก Drive เก็บ Log ฝั่ง Primary เต็ม Database จะหยุดทำงานทันที (Hang) </li>
+                            <li><strong>Network Gap:</strong> หากเน็ตหลุด ไฟล์จะไม่ถูกส่ง และถ้าเราลบไฟล์ฝั่ง Primary ทิ้งก่อนส่ง ข้อมูลจะพังทันที</li>
+                            <li><strong>ลำดับไฟล์:</strong> ห้ามสลับลำดับ Sequence ของไฟล์ .arc เพราะ Standby จะไม่อ่านต่อ</li>
+                        </ul>
+                    </div>
+
+                    <h3>ขั้นตอนการติดตั้ง (Step-by-Step)</h3>
+                    <ol>
+                        <li><span class="badge badge-step">Step 1</span> <strong>[Primary]</strong> เปิดโหมด ARCHIVELOG และตั้ง Path แยก (ห้ามอยู่ Drive C:)
+                            <pre><code>SQL> ALTER SYSTEM SET log_archive_dest_1='LOCATION=E:\Oracle\Archive' SCOPE=BOTH;</code></pre>
                         </li>
-                        <li><strong>[Primary] เขียน Script ส่งไฟล์:</strong> สร้างไฟล์ <code>sync_log.bat</code> ใช้คำสั่ง Robocopy ส่งไฟล์ที่เกิดใหม่ไปหาเครื่องสำรอง แล้วเซ็ต Windows Task Scheduler ให้รันทุก 5 นาที
-                            <pre><code>robocopy C:\Oracle\Archive \\DR-Server\SharedArchive /MON:1</code></pre>
+                        <li><span class="badge badge-step">Step 2</span> <strong>[Standby]</strong> สร้าง Share Folder และให้สิทธิ์ Write กับ User ที่ใช้รัน Script</li>
+                        <li><span class="badge badge-step">Step 3</span> <strong>[Primary]</strong> สร้าง Script ส่งไฟล์ (แนะนำใช้ Robocopy เพราะทนทานกว่า)
+                            <pre><code>robocopy E:\Archive \\DR-Server\Archive /Z /MOT:5 /R:10 /W:30</code></pre>
                         </li>
-                        <li><strong>[Standby] สร้างเครื่องสำรอง:</strong> Copy ไฟล์ Backup ของ Database หลักมาวาง แล้วใช้ RMAN สั่ง Restore ขึ้นมาในสถานะ `MOUNT` (ห้าม Open)</li>
-                        <li><strong>[Standby] เขียน Script รับข้อมูล:</strong> เขียน Script ให้ฝั่งสำรองรันคำสั่งนี้ซ้ำๆ เพื่อกวาดไฟล์ Log เข้า Database
+                        <li><span class="badge badge-step">Step 4</span> <strong>[Standby]</strong> รันคำสั่ง Apply Log แบบอัตโนมัติ
                             <pre><code>SQL> RECOVER AUTOMATIC STANDBY DATABASE;</code></pre>
                         </li>
                     </ol>
+
+                    <h3>การตรวจสอบประจำวัน (Daily Checklist)</h3>
+                    <ul>
+                        <li>ตรวจสอบสถานะ Sequence ล่าสุดทั้ง 2 ฝั่ง (ต้องห่างกันไม่เกิน 1-2 ไฟล์)
+                            <pre><code>SQL> SELECT MAX(SEQUENCE#) FROM V$ARCHIVED_LOG WHERE APPLIED='YES';</code></pre>
+                        </li>
+                        <li>ตั้งค่า <strong>RMAN Housekeeping</strong> เพื่อลบไฟล์ที่ส่งแล้วเท่านั้น
+                            <pre><code>RMAN> DELETE ARCHIVELOG ALL COMPLETED BEFORE 'SYSDATE-2';</code></pre>
+                        </li>
+                    </ul>
                 </div>
             </details>
 
             <details class="sub-details">
-                <summary class="sub-summary">วิธีที่ 2: Oracle SEHA (High Availability) <span class="badge badge-info" style="margin-left:10px;">ระบบไม่ล่ม</span></summary>
+                <summary class="sub-summary">วิธีที่ 2: Oracle SEHA (High Availability)</summary>
                 <div class="sub-content">
-                    <p><strong>คอนเซปต์:</strong> ทดแทนระบบ RAC ที่แพง โดยใช้ Server 2 เครื่องช่วยกันเฝ้า Shared Storage ก้อนเดียวกัน (เช่น SAN หรือ iSCSI) ถ้าเครื่อง A ดับ เครื่อง B จะดึง Storage ไปรันต่อทันที (ไม่มีข้อมูลสูญหาย 100%)</p>
-                    <ol class="steps">
-                        <li><strong>เตรียม Shared Disk:</strong> ใน Hyper-V ให้สร้าง VHDX แบบ <code>Shared Virtual Hard Disk</code> แล้ว Mount เข้าไปใน VM ทั้ง 2 เครื่องพร้อมกัน</li>
-                        <li><strong>ติดตั้ง Oracle Grid Infrastructure (GI):</strong> บนเครื่องหลัก เลือกติดตั้งแบบ Standalone Server (Oracle Restart) เพื่อให้ GI จัดการดิสก์ด้วยระบบ ASM (Automatic Storage Management)</li>
-                        <li><strong>ติดตั้ง Database:</strong> ลง Oracle DB ไว้ในดิสก์ ASM ที่แชร์กัน</li>
-                        <li><strong>เพิ่ม Node สำรอง:</strong> ใช้ฟีเจอร์ของ Clusterware ทำการ Add Node เครื่องที่ 2 เข้าไปในคลัสเตอร์ </li>
-                        <li><strong>จำลองสถานการณ์ล่ม:</strong> ปิด VM เครื่องหลัก ระบบ GI จะตรวจสอบพบว่าเน็ตเวิร์กขาดหาย และจะทำการ Start Oracle Service ขึ้นมาใหม่บน VM เครื่องที่ 2 ภายในเวลาไม่กี่นาที โดยใช้ IP เดิม (Failover)</li>
+                    <h3>ขั้นตอนการติดตั้ง</h3>
+                    <ol>
+                        <li>สร้าง <strong>Shared VHDX</strong> ใน Hyper-V และ Mount เข้า VM 2 เครื่องพร้อมกัน</li>
+                        <li>ติดตั้ง <strong>Grid Infrastructure</strong> (ASM) เพื่อทำ Shared Storage</li>
+                        <li>ติดตั้ง Oracle DB ลงบน ASM Disk</li>
+                        <li>ใช้คำสั่ง <code>srvctl add database</code> เพื่อให้ Clusterware รู้จักและย้ายคิวรันได้อัตโนมัติ</li>
                     </ol>
+                    <p class="warning-box"><strong>ข้อดี:</strong> ข้อมูลไม่หาย (Zero Data Loss) แต่อุปกรณ์ Shared Storage ต้องเสถียรมาก</p>
                 </div>
             </details>
 
             <details class="sub-details">
-                <summary class="sub-summary" open>วิธีที่ 3: Logical Replication (CDC) <span class="badge badge-warning" style="margin-left:10px;">ยืดหยุ่นสูงสุด</span></summary>
+                <summary class="sub-summary">วิธีที่ 3: Logical Replication (CDC - SymmetricDS)</summary>
                 <div class="sub-content">
-                    <p><strong>คอนเซปต์:</strong> CDC (Change Data Capture) คือการดักจับข้อมูล "ระดับแถว (Row)" ทันทีที่มีการ Insert/Update แล้วยิงข้อมูลนั้นผ่าน Network ไปลง Database อีกตัว <br>
-                    <strong>จุดเด่น:</strong> เหมาะกับงานที่ต้องการดึงตารางบางตัวออกไปวิเคราะห์ (Data Warehouse) หรือต่อกับระบบ LIS/Web App โดยไม่ให้ Database หลักทำงานหนักเกินไป รองรับการซิงค์ข้ามยี่ห้อ (เช่น Oracle -> PostgreSQL) โดยใช้ Tool ฟรีอย่าง <strong>SymmetricDS</strong></p>
-                    
-                    <ol class="steps">
-                        <li><strong>เตรียม Database หลัก:</strong> ต้องเปิด Supplemental Logging เพื่อให้ Oracle บันทึกข้อมูลที่ถูกแก้ลงใน Redo Log ให้ครบถ้วน
-                            <pre><code>SQL> ALTER DATABASE ADD SUPPLEMENTAL LOG DATA;
-SQL> CREATE USER sym_user IDENTIFIED BY pass123;
-SQL> GRANT CONNECT, RESOURCE, DBA TO sym_user;</code></pre>
-                        </li>
-                        <li><strong>ติดตั้ง SymmetricDS:</strong> ดาวน์โหลดและแตกไฟล์ SymmetricDS (เป็น Java Program) ลงใน Server ตัวกลาง หรือตัว Database ก็ได้</li>
-                        <li><strong>ตั้งค่า Engine (ฝั่ง Master):</strong> สร้างไฟล์ <code>corp-000.properties</code> ระบุการเชื่อมต่อ Database
-                            <pre><code>engine.name=corp-000
-db.driver=oracle.jdbc.driver.OracleDriver
-db.url=jdbc:oracle:thin:@192.168.1.100:1521:ORCL
-db.user=sym_user
-db.password=pass123
-sync.url=http://192.168.1.100:31415/sync/corp-000
-group.id=corp
-external.id=000</code></pre>
-                        </li>
-                        <li><strong>กำหนด Routing และ Trigger:</strong> เข้าหน้า Web GUI หรือรัน Script เพื่อตั้งค่าว่า <em>"ให้จับตาดูตาราง PATIENT_INFO และ LAB_RESULT ถ้ามีการอัปเดต ให้ส่งไปที่ Node ของ DR Site"</em></li>
-                        <li><strong>ตั้งค่าฝั่งรับ (Target Node):</strong> สร้างไฟล์ properties ฝั่งเครื่องรับข้อมูล (เช่น <code>store-001.properties</code>) แล้วสั่ง Registration ให้เครื่องลูกวิ่งมาหาเครื่อง Master</li>
-                        <li><strong>Start Service:</strong> สั่งรัน <code>sym --engine corp-000 --port 31415</code> ระบบจะเริ่มสร้าง Trigger ใน Oracle อัตโนมัติและส่งข้อมูลแบบ Real-time</li>
+                    <h3>ขั้นตอนการติดตั้ง</h3>
+                    <ol>
+                        <li>เปิด <strong>Supplemental Logging</strong> เพื่อให้ Redo Log บันทึกรายละเอียดการแก้ Row</li>
+                        <li>ติดตั้ง <strong>SymmetricDS Java Agent</strong> ไว้ที่เครื่อง Master</li>
+                        <li>Config ไฟล์ <code>engine.properties</code> ระบุ DB URL และ User/Pass</li>
+                        <li>รันคำสั่ง <code>symadmin create-sym-tables</code> เพื่อให้ Tool สร้างตารางมอนิเตอร์ใน Oracle</li>
                     </ol>
+                    <p class="warning-box"><strong>ดีที่สุดสำหรับ:</strong> การดึงข้อมูลไปเข้าฐานข้อมูลยี่ห้ออื่น หรือทำระบบ Dashboard แยก</p>
                 </div>
             </details>
 
-            <div class="recommendation-box">
-                <h3 style="margin-top:0; color:#0369a1;">🏆 คำแนะนำ: เลือกวิธีไหนดีที่สุด?</h3>
-                <p>ขึ้นอยู่กับข้อจำกัดและโจทย์ของระบบในองค์กรคุณครับ:</p>
-                <ul style="color: #0f172a;">
-                    <li><strong>เน้นงบ 0 บาท, ทำง่าย, คุ้นเคยกับ Script:</strong> <br>➡️ เลือก <strong>วิธีที่ 1 (Log Shipping)</strong> เพราะไม่ต้องลงโปรแกรมเพิ่ม ใช้แค่ความรู้ OS และ SQL เล็กน้อย ก็มี DR Site ไว้กู้ชีพได้แล้ว</li>
-                    <li><strong>ซีเรียสเรื่อง Data Loss ต้องเป็นศูนย์ (0) และมี Storage กลาง:</strong> <br>➡️ เลือก <strong>วิธีที่ 2 (Oracle SEHA)</strong> เหมาะกับระบบโรงพยาบาลหรือการเงินที่ข้อมูลหายไม่ได้แม้แต่เรคคอร์ดเดียว แต่มีข้อจำกัดคือป้องกันได้แค่ระดับ Server พัง ถ้าระบบไฟดับทั้งตึก (Storage ดับ) ก็ล่มอยู่ดี</li>
-                    <li><strong>ต้องการดึงข้อมูลไปทำ Web App หรือระบบ Report โดยไม่กวนระบบหลัก:</strong> <br>➡️ เลือก <strong>วิธีที่ 3 (CDC - SymmetricDS)</strong> วิธีนี้ดีที่สุดหากคุณมีทีมพัฒนา Web (เช่น ทำผ่าน Google Apps Script/Supabase) หรือต้องการแปลงข้อมูลเก่าส่งไปให้ระบบใหม่ๆ แบบ Real-time ครับ</li>
-                </ul>
+            <div class="header" style="background: #0369a1; padding: 20px; margin-top:30px;">
+                <h3 style="margin:0;">🏆 สรุป: วิธีไหนดีที่สุด?</h3>
+                <p style="margin:10px 0 0 0; font-size: 0.95rem;">
+                    1. <strong>Log Shipping:</strong> ดีสุดสำหรับ "งบประหยัด" แต่ Admin ต้องคอยดู Disk Space <br>
+                    2. <strong>SEHA:</strong> ดีสุดสำหรับ "ข้อมูลสำคัญห้ามหาย" แต่ต้องมี Storage กลาง <br>
+                    3. <strong>CDC:</strong> ดีสุดสำหรับ "การเชื่อมต่อระบบอื่น" หรือทำ Real-time Report
+                </p>
             </div>
         </section>
 
         <section id="tab8" class="tab-pane">
-            <h2>💻 8. PowerShell Commands</h2>
-            <pre><code># ดูสถานะ VM ทั้งหมด
-Get-VM
-
-# ดูสถานะ Replication
-Get-VMReplication
-
-# เริ่มต้นเปิด VM ทั้งหมดที่ปิดอยู่
-Get-VM | where {$_.State -eq 'Off'} | Start-VM</code></pre>
+            <h2>💻 4. PowerShell Cheat Sheet</h2>
+            <pre><code># ตรวจสอบพื้นที่ดิสก์และแจ้งเตือนผ่าน Console
+Get-PSDrive C,D,E | Select-Object Name, @{n='Used(GB)';e={[math]::round($_.Used/1GB,2)}}, @{n='Free(GB)';e={[math]::round($_.Free/1GB,2)}}</code></pre>
         </section>
-
     </main>
 </div>
 
 <script>
     function openTab(evt, tabName) {
-        var tabPanes = document.getElementsByClassName("tab-pane");
-        for (var i = 0; i < tabPanes.length; i++) { tabPanes[i].classList.remove("active"); }
-        var navBtns = document.getElementsByClassName("nav-btn");
-        for (var i = 0; i < navBtns.length; i++) { navBtns[i].classList.remove("active"); }
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-pane");
+        for (i = 0; i < tabcontent.length; i++) { tabcontent[i].classList.remove("active"); }
+        tablinks = document.getElementsByClassName("nav-btn");
+        for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
         document.getElementById(tabName).classList.add("active");
         evt.currentTarget.classList.add("active");
-        if(window.innerWidth <= 900) { window.scrollTo({ top: document.querySelector('.main-content').offsetTop - 20, behavior: 'smooth' }); }
     }
 </script>
 
