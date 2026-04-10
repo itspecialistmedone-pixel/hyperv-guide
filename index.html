@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyper-V Ultimate Guide & Troubleshooting</title>
+    <title>Hyper-V & Oracle Database Ultimate Guide</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,7 +19,7 @@
             line-height: 1.6;
             margin: 0;
             padding: 20px;
-            font-size: 18px; /* ปรับฟอนต์ให้ใหญ่ อ่านง่าย */
+            font-size: 18px;
         }
         .container {
             max-width: 900px;
@@ -105,6 +105,13 @@
             border-left: 6px solid #ffeeba;
             margin-top: 20px;
         }
+        code {
+            background-color: #e2e8f0;
+            color: #d63384;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
@@ -112,7 +119,7 @@
 <div class="container">
     <div class="header">
         <h1>Hyper-V Ultimate Guide</h1>
-        <p>คู่มือฉบับสมบูรณ์: การติดตั้ง, Backup, Replication และ Troubleshooting</p>
+        <p>คู่มือฉบับสมบูรณ์: การติดตั้ง, Backup, DR Site และ Oracle Database</p>
     </div>
 
     <div class="card">
@@ -149,7 +156,7 @@
     </div>
 
     <div class="card">
-        <h2>🔄 3. การทำ Replication (DR Site)</h2>
+        <h2>🔄 3. การทำ Replication (DR Site ระดับ VM)</h2>
         <p>ส่งสำเนา VM จาก Host ต้นทางไป Host ปลายทาง เพื่อสลับไปใช้เวลาเครื่องหลักมีปัญหา</p>
         
         <h3>Step 1: ตั้งค่า Replica Broker (ทำทั้งสองเครื่อง)</h3>
@@ -218,12 +225,51 @@ Test-VHD -Path "D:\Hyper-V\VM01.vhdx"</code></pre>
         </ul>
     </div>
 
+    <div class="card">
+        <h2>🗄️ 7. การ Backup & Replicate Oracle Database (ฉบับฟรี)</h2>
+        <p>สำหรับองค์กรที่ไม่ได้ใช้ตัว Enterprise Edition หรือต้องการโซลูชันแบบไม่เสียค่า License เพิ่มเติม แนะนำแนวทางดังนี้:</p>
+
+        <h3>🛡️ วิธีการ Backup Oracle</h3>
+        <ul>
+            <li><strong>1. RMAN (Recovery Manager) <span class="badge">แนะนำที่สุด</span>:</strong> เป็นเครื่องมือฟรีของ Oracle เอง รองรับการทำ Full, Incremental และ Hot Backup (Backup ได้โดยไม่ต้องปิดระบบ)</li>
+            <li><strong>2. Oracle Data Pump (expdp/impdp):</strong> เหมาะสำหรับการ Backup แบบ Logical เช่น ต้องการดึงเฉพาะบาง Schema หรือแค่บาง Table ข้ามไปอีกเครื่อง</li>
+            <li><strong>3. Cold Backup (OS Level):</strong> สั่งปิด Database (Shutdown) แล้วทำการ Copy ไฟล์ <code>.dbf</code>, Control files และ Redo logs ไปเก็บตรงๆ (เหมาะกับระบบที่ยอมให้มี Downtime นอกเวลาได้)</li>
+        </ul>
+
+        <div class="warning-box" style="margin-top: 10px; margin-bottom: 20px;">
+            <strong>⚠️ ข้อควรระวัง: Veeam/Hyper-V Backup กับ Oracle</strong><br>
+            การสั่ง Snapshot หรือ Backup ระดับ VM อาจทำให้ไฟล์ Oracle Database "Corrupt" ได้ หากไม่ได้ติดตั้ง/คอนฟิก Oracle VSS Writer ให้ถูกต้อง วิธีที่ปลอดภัยที่สุดคือ <strong>ให้ RMAN ทำการ Backup ลงโฟลเดอร์ภายใน VM ก่อน แล้วค่อยใช้ Veeam/Hyper-V ดึงไฟล์ RMAN นั้นไปเก็บอีกที</strong>
+        </div>
+
+        <h3>🔄 วิธีการ Replicate Oracle ทำ DR Site (ทดแทน Data Guard)</h3>
+        <p>เนื่องจากฟีเจอร์ Oracle Data Guard ต้องเสียเงินซื้อแบบ Enterprise เราจึงมีทางเลือกฟรีดังนี้:</p>
+        <ol>
+            <li><strong>ใช้ Hyper-V Replica (OS-Level DR) <span class="badge">ทำง่ายสุด</span>:</strong>
+                <ul>
+                    <li>ใช้ฟีเจอร์ Replication ของ Hyper-V ที่ทำไว้ในหัวข้อที่ 3</li>
+                    <li><strong>ข้อจำกัด:</strong> มันคือการทำ Crash-Consistent Backup (เสมือนดึงปลั๊กเครื่องหลักไปเปิดอีกเครื่อง) ตอนเปิดฝั่ง DR Site อาจต้องเข้า SQL*Plus ไปรันคำสั่ง <code>RECOVER DATABASE</code> เล็กน้อยเพื่อให้ข้อมูลสมบูรณ์</li>
+                </ul>
+            </li>
+            <li><strong>Manual Standby Database (Log Shipping Script):</strong>
+                <ul>
+                    <li>เขียน Script (Batch/Shell) เพื่อโยนไฟล์ <strong>Archive Logs</strong> จากเครื่องหลักไปยังเครื่องสำรองผ่าน Network Share (SMB/FTP)</li>
+                    <li>ตั้งให้เครื่องสำรองรัน Script อัตโนมัติเพื่อนำ Log นั้นมา Apply เข้า Database (เป็นการทำ Near Real-time DR ที่คนใช้ Standard Edition นิยมที่สุด)</li>
+                </ul>
+            </li>
+            <li><strong>ใช้ Open Source CDC (Change Data Capture):</strong>
+                <ul>
+                    <li>ใช้ Tool ฟรีอย่าง <strong>Debezium</strong> หรือ <strong>SymmetricDS</strong> เพื่อจับการเปลี่ยนแปลงระดับ Row แล้วยิงข้อมูลข้ามไปยังอีก Database หนึ่งแบบ Real-time (ตั้งค่ายากกว่า แต่ยืดหยุ่นสูงและข้ามเวอร์ชัน Database ได้)</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
     <div class="warning-box">
-        <strong>💡 ข้อควรระวัง (Best Practices) ทั่วไป</strong>
+        <strong>💡 ข้อควรระวัง (Best Practices) ทั่วไปของ Hyper-V</strong>
         <ul style="margin-top: 10px; margin-bottom: 0;">
             <li><strong>Memory:</strong> Server สำคัญควรใช้ Startup RAM แบบคงที่ (Fixed) ไม่ใช้ Dynamic</li>
             <li><strong>Checkpoints:</strong> ไม่ควรเก็บ Snapshot ไว้นานเกิน 24-48 ชม. เพราะจะกินพื้นที่และทำให้เครื่องช้า</li>
-            <li><strong>Integration Services:</strong> อัปเดต Integration Services ใน VM เสมอ เพื่อให้ระบบ Backup แบบ VSS ทำงานสมบูรณ์</li>
+            <li><strong>Integration Services:</strong> อัปเดต Integration Services ใน VM เสมอ เพื่อให้ระบบ Backup ทำงานสมบูรณ์</li>
         </ul>
     </div>
 </div>
