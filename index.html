@@ -3,52 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyper-V & Oracle IT Manual - Pro Edition</title>
+    <title>IT Admin Guide: Infrastructure & HA</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0056b3; --primary-dark: #004494; --bg-color: #f0f4f8;
-            --text-dark: #2d3748; --text-light: #4a5568; --accent: #e2e8f0;
-            --active-bg: #ebf4ff; --danger: #dc3545; --warning: #ffc107; --success: #28a745;
+            --primary: #1e40af; --primary-dark: #1e3a8a; --bg-color: #f1f5f9;
+            --text-dark: #1e293b; --text-light: #475569; --accent: #e2e8f0;
+            --active-bg: #eff6ff; --danger: #ef4444; --warning: #f59e0b; --success: #22c55e;
         }
         * { box-sizing: border-box; }
         body { font-family: 'Prompt', sans-serif; background-color: var(--bg-color); color: var(--text-dark); line-height: 1.6; margin: 0; padding: 20px; font-size: 16px; }
-        .header { text-align: center; padding: 30px 15px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-radius: 12px; margin-bottom: 20px; }
-        .layout-wrapper { display: flex; gap: 20px; max-width: 1200px; margin: 0 auto; align-items: flex-start; }
-        .sidebar { flex: 0 0 300px; background: #ffffff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: sticky; top: 20px; }
-        .nav-btn { display: block; width: 100%; text-align: left; background: transparent; border: none; padding: 12px 15px; margin-bottom: 5px; font-weight: 600; cursor: pointer; border-radius: 8px; border-left: 4px solid transparent; transition: 0.3s; font-size: 0.95rem; }
+        .header { text-align: center; padding: 35px 15px; background: var(--primary); color: white; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .header h1 { margin: 0; font-size: 2.2rem; line-height: 1.2; }
+        .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 1.1rem; }
+        
+        .layout-wrapper { display: flex; gap: 25px; max-width: 1280px; margin: 0 auto; align-items: flex-start; }
+        
+        /* Sidebar */
+        .sidebar { flex: 0 0 300px; background: #ffffff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); position: sticky; top: 20px; }
+        .nav-btn { display: block; width: 100%; text-align: left; background: transparent; border: none; padding: 14px 16px; margin-bottom: 6px; font-weight: 600; cursor: pointer; border-radius: 8px; border-left: 4px solid transparent; transition: 0.2s; font-size: 0.95rem; font-family: 'Prompt', sans-serif;}
         .nav-btn:hover { background-color: var(--accent); }
         .nav-btn.active { background-color: var(--active-bg); color: var(--primary); border-left: 4px solid var(--primary); }
-        .main-content { flex: 1; background: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); min-height: 70vh; }
+        
+        /* Main Content */
+        .main-content { flex: 1; background: #ffffff; border-radius: 12px; padding: 35px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); min-height: 70vh; }
         .tab-pane { display: none; } .tab-pane.active { display: block; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         
-        details.sub-details { background: #f8fafc; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--accent); }
-        summary.sub-summary { padding: 15px; font-weight: 600; cursor: pointer; background: #f1f5f9; border-radius: 8px; display: flex; align-items: center; }
-        summary.sub-summary::before { content: '▶'; font-size: 0.8rem; margin-right: 10px; color: var(--primary); transition: 0.2s; }
-        details[open] > summary.sub-summary::before { transform: rotate(90deg); }
-        .sub-content { padding: 20px; background: #ffffff; }
-        
-        pre { background-color: #2d3748; color: #f8f8f2; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: monospace; font-size: 0.95rem;}
-        .warning-box { background-color: #fff3cd; color: #856404; padding: 20px; border-radius: 8px; border-left: 6px solid var(--warning); margin-top: 20px; }
-        .critical-box { background-color: #fde8e8; color: #9b1c1c; padding: 20px; border-radius: 8px; border-left: 6px solid var(--danger); margin-top: 20px; }
-        .info-box { background-color: #e0f2fe; color: #0369a1; padding: 20px; border-radius: 8px; border-left: 6px solid #38bdf8; margin-top: 20px; }
-        .badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; color: white; font-weight: bold; margin-left: 5px; }
-        .badge-step { background: var(--primary); margin-left: 0; margin-right: 10px; }
-        .badge-free { background: var(--success); }
-        
-        h2 { border-bottom: 2px solid var(--accent); padding-bottom: 10px; color: var(--primary); }
-        h3 { margin-top: 25px; }
-        ul, ol { padding-left: 20px; }
+        /* Typography & Elements */
+        h2 { color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 12px; font-size: 1.6rem;}
+        h3 { color: var(--text-dark); margin-top: 25px; font-size: 1.2rem;}
+        ul, ol { padding-left: 20px; margin-bottom: 15px; }
         li { margin-bottom: 8px; }
-        .ui-btn { background: var(--accent); padding: 2px 6px; border-radius: 4px; border: 1px solid #cbd5e0; font-family: monospace; font-size: 0.9em; }
+        
+        .ui-btn { background: var(--bg-color); color: var(--text-dark); padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; border: 1px solid #cbd5e0; font-family: monospace;}
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; color: white; font-weight: 600; margin-left: 8px; }
+        .badge-success { background: var(--success); }
+        .badge-warning { background: var(--warning); color: #fff;}
+        .badge-danger { background: var(--danger); }
+        
+        /* Boxes */
+        .box { padding: 20px; border-radius: 8px; margin-top: 20px; margin-bottom: 20px; font-size: 0.95rem; }
+        .warning-box { background-color: #fef3c7; color: #92400e; border-left: 5px solid var(--warning); }
+        .critical-box { background-color: #fee2e2; color: #991b1b; border-left: 5px solid var(--danger); }
+        .info-box { background-color: #e0f2fe; color: #075985; border-left: 5px solid #0ea5e9; }
+        
+        pre { background-color: #1e293b; color: #f8fafc; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.95rem; line-height: 1.5; border: 1px solid #334155;}
+        
+        /* Accordion for Steps */
+        details.sub-details { background: #f8fafc; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--accent); }
+        summary.sub-summary { padding: 16px; font-weight: 600; cursor: pointer; background: #f1f5f9; border-radius: 8px; display: flex; align-items: center; font-size: 1.05rem;}
+        summary.sub-summary::before { content: '▶'; font-size: 0.8rem; margin-right: 12px; color: var(--primary); transition: 0.2s; }
+        details[open] > summary.sub-summary::before { transform: rotate(90deg); }
+        details[open] > summary.sub-summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: 1px solid var(--accent); }
+        .sub-content { padding: 20px; background: #ffffff; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
 
-        @media (max-width: 900px) { .layout-wrapper { flex-direction: column; } .sidebar { width: 100%; position: relative; display: flex; flex-wrap: wrap; } .nav-btn { flex: 1 1 48%; } }
+        @media (max-width: 900px) { .layout-wrapper { flex-direction: column; } .sidebar { width: 100%; position: relative; top: 0; display: flex; flex-wrap: wrap; gap: 8px; } .nav-btn { flex: 1 1 calc(50% - 8px); padding: 12px; font-size: 0.9rem; text-align: center; border-left: none; border-bottom: 4px solid transparent; } .nav-btn.active { border-left: none; border-bottom: 4px solid var(--primary); } }
+        @media (max-width: 600px) { .nav-btn { flex: 1 1 100%; } }
     </style>
 </head>
 <body>
 
-<div class="header" style="max-width: 1200px; margin: 0 auto 20px auto;">
+<div class="header" style="max-width: 1280px; margin: 0 auto 25px auto;">
     <h1>IT Admin Guide: Infrastructure & HA</h1>
     <p>Hyper-V, Oracle Database & Monitoring System</p>
 </div>
@@ -62,68 +78,258 @@
         <button class="nav-btn" onclick="openTab(event, 'tab5')">🛢️ 5. สเปค VM สำหรับ Oracle</button>
         <button class="nav-btn" onclick="openTab(event, 'tab6')">🛡️ 6. Backup Oracle (ฟรี)</button>
         <button class="nav-btn" onclick="openTab(event, 'tab7')">🔗 7. Replicate Oracle (ฉบับเจาะลึก)</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab8')">📈 8. Monitoring & Alert <span class="badge badge-free">New!</span></button>
+        <button class="nav-btn" onclick="openTab(event, 'tab8')">📈 8. Monitoring & Alert <span class="badge badge-success">New!</span></button>
         <button class="nav-btn" onclick="openTab(event, 'tab9')">💻 9. PowerShell Commands</button>
     </nav>
 
     <main class="main-content">
         <section id="tab1" class="tab-pane active">
-            <h2>🛠️ 1. ติดตั้ง Hyper-V แบบละเอียด</h2>
+            <h2>🛠️ 1. การติดตั้ง Hyper-V แบบละเอียด</h2>
+            <p>ตรวจสอบใน BIOS ของ Server ว่าเปิด <strong>Virtualization (VT-x / AMD-V)</strong> เรียบร้อยแล้ว</p>
             <ol>
-                <li>เปิด <span class="ui-btn">Server Manager</span> > Add roles and features</li>
-                <li>ติ๊กถูกที่ช่อง <strong>Hyper-V</strong></li>
-                <li><strong>Default Stores:</strong> เปลี่ยน Path ที่เก็บไฟล์ VHDX ไป Drive อื่นที่ไม่ใช่ C:</li>
-                <li>กด Install และ Restart</li>
+                <li>เปิด <span class="ui-btn">Server Manager</span> บน Windows Server</li>
+                <li>มุมขวาบนคลิก <span class="ui-btn">Manage</span> > เลือก <span class="ui-btn">Add roles and features</span></li>
+                <li>กด Next ไปเรื่อยๆ จนถึงหน้า <strong>Server Roles</strong> ให้ติ๊กถูกที่ช่อง <strong>Hyper-V</strong></li>
+                <li>หน้า <strong>Virtual Switches:</strong> เลือกว่าจะให้ VM ใช้การ์ดแลน (NIC) ใบไหนเพื่อออกเน็ต (หาก Server มีหลายพอร์ต ให้เลือกพอร์ตที่ต่อสายแลน External ไว้)</li>
+                <li>หน้า <strong>Migration:</strong> ติ๊กถูกที่ "Allow this server to send and receive live migrations..."</li>
+                <li>หน้า <strong>Default Stores:</strong> <strong style="color:var(--danger);">สำคัญมาก!</strong> ให้เปลี่ยน Path ที่เก็บไฟล์ VHDX และ Configuration ไปไว้ที่ Drive อื่นที่ไม่ใช่ Drive C: (เช่น <code>D:\Hyper-V</code>)</li>
+                <li>กด <span class="ui-btn">Install</span> และ Restart เครื่อง 1 รอบ</li>
             </ol>
-            <div class="info-box"><strong>💡 Pro Tip:</strong> แนะนำให้ใช้ <strong>Windows Admin Center (WAC)</strong> ซึ่งเป็น Web GUI ฟรีของ Microsoft มาติดตั้งเพื่อจัดการ Hyper-V แทน Server Manager จะช่วยให้ดูหน้าจอและจัดการ VM ได้ง่ายขึ้นมาก</div>
+            <div class="box info-box">
+                <strong>💡 Pro Tip:</strong> แนะนำให้ดาวน์โหลดและติดตั้ง <strong>Windows Admin Center (WAC)</strong> ซึ่งเป็น Web GUI ฟรีของ Microsoft มาใช้จัดการ Hyper-V แทน Server Manager จะช่วยให้ดูหน้าจอตั้งค่า Network และจัดการ VM ได้ง่ายขึ้นมาก
+            </div>
         </section>
 
-        <section id="tab2" class="tab-pane"><h2>💾 2. วิธีการ Backup VM</h2><p>แนะนำ Veeam Community Edition...</p></section>
-        <section id="tab3" class="tab-pane"><h2>🔄 3. การทำ Replication (DR Site ระดับ VM)</h2><p>ตั้งค่า Replica Broker...</p></section>
-        <section id="tab4" class="tab-pane"><h2>🔌 4. แก้ปัญหา VM มองไม่เห็น Network</h2><p>ปิดฟีเจอร์ Enable virtual machine queue...</p></section>
-        <section id="tab5" class="tab-pane"><h2>🛢️ 5. ตั้งค่า VM สำหรับ Oracle Database</h2><p>ห้ามใช้ Dynamic Memory และใช้ VHDX แบบ Fixed Size...</p></section>
-        <section id="tab6" class="tab-pane"><h2>🛡️ 6. Backup Oracle (ฉบับฟรี)</h2><p>รัน RMAN Backup เป็น Script...</p></section>
+        <section id="tab2" class="tab-pane">
+            <h2>💾 2. วิธีการ Backup VM (ระดับ OS)</h2>
+            
+            <h3>วิธีที่ 1: ใช้ Windows Server Backup (ฟรีในตัว)</h3>
+            <ol>
+                <li>ติดตั้ง Feature: <strong>Windows Server Backup</strong> ผ่านหน้า Server Manager</li>
+                <li>เปิดโปรแกรม > เลือก <span class="ui-btn">Backup Schedule...</span></li>
+                <li>เลือก <strong>Custom</strong> > <span class="ui-btn">Add Items</span> > เลือกที่โฟลเดอร์ Hyper-V แล้วติ๊กเลือก VM ที่ต้องการ Backup</li>
+                <li>กำหนดเวลา (ควรเป็นช่วงดึก) และเลือก Destination ให้เซฟลง External HDD หรือ Network Share</li>
+            </ol>
+
+            <h3>วิธีที่ 2: ใช้ Veeam Community Edition <span class="badge badge-success">แนะนำที่สุด</span></h3>
+            <ul>
+                <li>ติดตั้ง <span class="ui-btn">Veeam Backup & Replication</span> (สามารถโหลดเวอร์ชัน Community มาใช้ได้ฟรีสำหรับ 10 Workloads)</li>
+                <li>เพิ่ม Hyper-V Server ของคุณเข้าไปในระบบของ Veeam</li>
+                <li>สร้าง Backup Job และเลือก VM ที่ต้องการ</li>
+                <li><strong>จุดเด่น:</strong> แนะนำให้เปิดฟีเจอร์ <strong>Application-aware processing</strong> ตอนสร้าง Job ด้วย เพื่อให้ระบบ Backup ทำงานประสานกับ Database ภายใน VM ได้อย่างสมบูรณ์ (VSS Integration)</li>
+            </ul>
+        </section>
+
+        <section id="tab3" class="tab-pane">
+            <h2>🔄 3. การทำ Replication (DR Site ระดับ VM)</h2>
+            <p>คือการส่งสำเนา VM ทั้งก้อนจาก Host ต้นทางไป Host ปลายทาง เพื่อสลับไปเปิดใช้งานเวลาเครื่องหลักพัง</p>
+            
+            <h3>Step 1: ตั้งค่า Replica Broker (ทำทั้งเครื่องหลักและเครื่องสำรอง)</h3>
+            <ol>
+                <li>เปิด Hyper-V Manager > คลิกที่ <span class="ui-btn">Hyper-V Settings...</span> ด้านขวามือ</li>
+                <li>ไปที่เมนู <strong>Replication Configuration</strong></li>
+                <li>ติ๊ก <span class="ui-btn">Enable this computer as a Replica server</span></li>
+                <li>เลือก <strong>Use Kerberos (HTTP)</strong> และในส่วน Authorization เลือก "Allow replication from the specified servers" ใส่ IP เครื่องตรงข้ามลงไป</li>
+            </ol>
+
+            <h3>Step 2: เริ่มทำ Replication บน VM (ทำที่เครื่องหลัก)</h3>
+            <ol>
+                <li>คลิกขวาที่ VM เครื่องต้นทาง > เลือก <span class="ui-btn">Enable Replication...</span></li>
+                <li>ใส่ชื่อหรือ IP ของ <strong>Replica Server</strong> (เครื่องปลายทาง)</li>
+                <li>เลือก VHDX ที่ต้องการส่งไป</li>
+                <li>ตั้งค่า <strong>Replication Frequency</strong> (มีให้เลือก 30 วินาที, 5 นาที, 15 นาที)</li>
+                <li>เลือก "Send initial copy over the network" > กด Finish ระบบจะเริ่มโยนข้อมูลก้อนแรกทันที</li>
+            </ol>
+        </section>
+
+        <section id="tab4" class="tab-pane">
+            <h2>🔌 4. แก้ปัญหา VM มองไม่เห็น Network</h2>
+            
+            <h3>1. ปัญหาเน็ตหลุดสุ่มๆ หรือ Ping ไม่เจอ (ปิด VMQ) <span class="badge badge-warning">เจอบ่อยมาก</span></h3>
+            <p>มักเกิดกับ Server ที่ใช้การ์ดแลนของ Broadcom ที่ฟีเจอร์ Virtual Machine Queue (VMQ) ทำงานผิดปกติ ให้แก้ดังนี้:</p>
+            <ol>
+                <li>คลิกขวาที่ VM ที่มีปัญหา > เลือก <span class="ui-btn">Settings...</span></li>
+                <li>กางเมนู Network Adapter ออกมา > คลิกที่ <span class="ui-btn">Hardware Acceleration</span></li>
+                <li>ด้านขวามือ <strong>เอาเครื่องหมายติ๊กถูกออก</strong> จากช่อง <span class="ui-btn">Enable virtual machine queue</span></li>
+            </ol>
+
+            <h3>2. การใส่ VLAN ID ให้กับ VM</h3>
+            <ul>
+                <li>หากองค์กรใช้ VLAN ให้เข้าไปที่ Settings ของ VM > Network Adapter > ติ๊กช่อง <span class="ui-btn">Enable virtual LAN identification</span> แล้วใส่เลข VLAN ID ให้ถูกต้อง</li>
+            </ul>
+
+            <h3>3. MAC Address Spoofing</h3>
+            <ul>
+                <li>หาก VM นั้นทำหน้าที่เป็น Load Balancer, HAProxy หรือรัน Docker/Kubernetes ซ้อนอยู่ข้างใน ต้องเข้าไปกางเมนู Advanced Features ของ Network Adapter แล้วติ๊กเปิด <span class="ui-btn">Enable MAC address spoofing</span> ด้วย</li>
+            </ul>
+        </section>
+
+        <section id="tab5" class="tab-pane">
+            <h2>🛢️ 5. แนวทางการตั้งค่า VM สำหรับ Oracle Database</h2>
+            <p>การนำ Hyper-V มารัน Database ระดับ Enterprise อย่าง Oracle (เช่น 19c) มีกฎเหล็กเพื่อป้องกันระบบหน่วงหรือล่มดังนี้:</p>
+
+            <h3>1. การตั้งค่า Storage (VHDX) <span class="badge badge-danger">บังคับทำ</span></h3>
+            <ul>
+                <li>ต้องสร้างไฟล์ VHDX เป็นแบบ <strong>"Fixed Size" (ขนาดคงที่) เท่านั้น</strong> ห้ามใช้ Dynamically expanding เด็ดขาด เพื่อให้ได้ความเร็ว I/O ของดิสก์สูงสุด และป้องกัน Disk Fragmentation</li>
+                <li>ควรแยก Drive ของ OS (C:) และ Drive ของ Database (เช่น D:, E:) ออกจากกัน คนละไฟล์ VHDX</li>
+            </ul>
+
+            <h3>2. การตั้งค่า Memory (RAM) <span class="badge badge-danger">บังคับทำ</span></h3>
+            <ul>
+                <li>ไปที่ Settings > Memory</li>
+                <li><strong>เอาเครื่องหมายติ๊กถูกออก</strong> จากช่อง <span class="ui-btn">Enable Dynamic Memory</span></li>
+                <li>ใส่ Startup RAM เป็นแบบคงที่ (Static) เช่น ขั้นต่ำ 8192 MB (8GB) ขึ้นไปสำหรับ Production เพื่อให้ Oracle จองพื้นที่หน่วยความจำหลัก (SGA/PGA) ได้อย่างเสถียร ไม่โดน Windows ดึง RAM กลับ</li>
+            </ul>
+
+            <h3>3. CPU (vCPU)</h3>
+            <ul>
+                <li>ขั้นต่ำ 2 Core (แนะนำ 4-8 Core ขึ้นไปสำหรับระดับ Production)</li>
+            </ul>
+        </section>
+
+        <section id="tab6" class="tab-pane">
+            <h2>🛡️ 6. การ Backup Oracle Database (ฉบับฟรี)</h2>
+            <div class="box critical-box">
+                <strong>⚠️ ข้อควรระวังสูงสุด: Veeam/Hyper-V Backup กับ Oracle</strong><br>
+                ห้ามใช้การทำ Snapshot หรือการสั่ง Backup ระดับ VM (จากข้อ 2) ถ่าย Backup VM ที่กำลังรัน Oracle อยู่โดยตรง (เว้นแต่จะตั้งค่า VSS Integration ถูกต้อง 100%) เพราะอาจทำให้ไฟล์ Database "Corrupt" ได้ <br>
+                👉 <strong>วิธีที่ถูกต้อง:</strong> ให้รัน RMAN ถ่าย Backup ลงเป็นไฟล์ในเครื่อง VM ก่อน แล้วค่อยให้ Veeam/Windows Backup มาดูดโฟลเดอร์นั้นไปเก็บอีกชั้นหนึ่ง
+            </div>
+
+            <h3>RMAN (Recovery Manager) <span class="badge badge-success">แนะนำที่สุด</span></h3>
+            <p>เป็นเครื่องมือฟรีที่มีใน Oracle ทุกรุ่น รองรับการทำ Full, Incremental และ Hot Backup (Backup ได้โดยไม่ต้องปิด Database)</p>
+            <pre><code># เปิด Command Prompt เข้าสู่ระบบ RMAN
+rman target /
+
+# 1. ตั้งค่าให้เซฟ Controlfile อัตโนมัติทุกครั้งที่มีการ Backup
+CONFIGURE CONTROLFILE AUTOBACKUP ON;
+
+# 2. สั่ง Backup ฐานข้อมูลทั้งหมดพร้อมไฟล์ Archive Log
+BACKUP DATABASE PLUS ARCHIVELOG;</code></pre>
+            <p><em>💡 แนะนำให้เขียนคำสั่งข้างต้นเป็นไฟล์ <code>.bat</code> หรือ <code>.sh</code> แล้วตั้ง Task Scheduler รันทุกคืนตอนตี 2</em></p>
+
+            <h3>Oracle Data Pump (expdp/impdp)</h3>
+            <p>เหมาะสำหรับการ Backup แบบ Logical (เอาเฉพาะโครงสร้าง หรือบาง Table) ดึงข้อมูลข้ามไปอีกเครื่อง</p>
+            <pre><code># โยน Schema ชื่อ HR ออกเป็นไฟล์ .dmp
+expdp system/password schemas=HR directory=BACKUP_DIR dumpfile=hr_backup.dmp</code></pre>
+        </section>
 
         <section id="tab7" class="tab-pane">
-            <h2>🔗 7. เจาะลึกการทำ Replicate Oracle (ไม่มี Data Guard)</h2>
-            <details class="sub-details">
-                <summary class="sub-summary">วิธีที่ 1: Log Shipping (Manual Standby)</summary>
-                <div class="sub-content">
-                    <p>รัน Script ส่งไฟล์ Archive Log ด้วย Robocopy และตั้ง Task Scheduler...</p>
-                </div>
-            </details>
-        </section>
-
-        <section id="tab8" class="tab-pane">
-            <h2>📈 8. ระบบ Monitoring & การแจ้งเตือน (Alerting)</h2>
-            <p>เพื่อป้องกันปัญหาระบบล่มโดยไม่รู้ตัว (เช่น พื้นที่ Log เต็ม หรือ Service ดับ) การมีระบบ Monitoring จึงจำเป็นอย่างยิ่งสำหรับ IT Admin ครับ</p>
+            <h2>🔗 7. เจาะลึกวิธี Replicate Oracle Database (ไม่มี Data Guard)</h2>
+            <p>ฟีเจอร์ Oracle Data Guard ต้องเสียเงินซื้อ License แบบ Enterprise Edition หากองค์กรใช้ Standard Edition (SE2) เรามีทางเลือกฟรี 3 วิธีที่ดีที่สุด ดังนี้ครับ:</p>
 
             <details class="sub-details" open>
-                <summary class="sub-summary">ตาข่ายชั้นที่ 1: ใช้ Checkmk มอนิเตอร์แบบรวมศูนย์</summary>
+                <summary class="sub-summary">วิธีที่ 1: Log Shipping (Manual Standby) <span class="badge badge-success">ประหยัดสุด ยอดนิยม</span></summary>
                 <div class="sub-content">
-                    <p><strong>Checkmk (Raw Edition)</strong> เป็นเครื่องมือ Open Source ที่ยอดเยี่ยมมาก สามารถตั้ง Checkmk Server บน VM <strong>Ubuntu 22.04 LTS</strong> ได้ฟรี และมอนิเตอร์อุปกรณ์ได้ครอบคลุม</p>
+                    <p><strong>หลักการ:</strong> อาศัยการก๊อปปี้ไฟล์ Archive Log ที่เกิดใหม่จากเครื่อง Primary โยนข้าม Network ไปให้เครื่อง Standby รันคำสั่งอ่าน (RPO ข้อมูลหายประมาณ 5-15 นาที)</p>
+                    
+                    <div class="box critical-box" style="margin-top: 10px;">
+                        <strong>🚨 ข้อควรระวัง (จุดตายของวิธีนี้)</strong>
+                        <ul style="margin-bottom: 0;">
+                            <li><strong>ORA-00257:</strong> หาก Drive ที่เก็บ Archive Log ฝั่ง Primary "พื้นที่เต็ม" Database จะหยุดชะงัก (Hang) ทันที ต้องทำ Housekeeping คอยลบไฟล์เก่าเสมอ</li>
+                            <li><strong>Log Gap:</strong> ห้ามไฟล์ระหว่างทางหายหรือข้ามลำดับ (Sequence) เพราะเครื่อง Standby จะหยุดซิงค์ข้อมูลต่อทันที</li>
+                        </ul>
+                    </div>
+
+                    <h3>ขั้นตอนการทำ (Step-by-Step)</h3>
                     <ol>
-                        <li><strong>การมอนิเตอร์ Hyper-V Host:</strong> ติดตั้ง Checkmk Agent บน Windows Server แล้วนำไฟล์ <code>hyperv_vms.ps1</code> ไปใส่ในโฟลเดอร์ plugins เพื่อให้ระบบแสดงสถานะ VM ทุกตัวว่าเปิดหรือปิดอยู่ พร้อมดูการกิน CPU/RAM ของแต่ละ VM ได้</li>
-                        <li><strong>การมอนิเตอร์ Oracle Database:</strong> นำปลั๊กอิน <code>mk_oracle</code> ไปวางที่ฝั่ง Database Server กำหนดสิทธิ์ User ให้เรียบร้อย Checkmk จะสามารถมอนิเตอร์พื้นที่ Tablespace, สถานะ Archive Log, และการทำ Backup ของ RMAN ได้ลึกถึงแก่น</li>
-                        <li><strong>Network & Firewall:</strong> สามารถใช้ SNMP มอนิเตอร์ Traffic ของ Switch หรือ Firewall (เช่น Zyxel USG) เพื่อดู Bandwidth ที่ใช้ในการ Replicate ข้อมูลได้ด้วย</li>
+                        <li><strong>[Primary] เปิดโหมดจัดเก็บ Log และแยก Drive:</strong>
+                            <pre><code>SQL> SHUTDOWN IMMEDIATE;
+SQL> STARTUP MOUNT;
+SQL> ALTER DATABASE ARCHIVELOG;
+SQL> ALTER SYSTEM SET log_archive_dest_1='LOCATION=E:\Oracle\Archive' SCOPE=BOTH;
+SQL> ALTER DATABASE OPEN;</code></pre>
+                        </li>
+                        <li><strong>[Standby] สร้าง Share Folder:</strong> ไปที่เครื่องสำรอง สร้างโฟลเดอร์ <code>D:\Oracle_Archive_Standby</code> แล้ว Share ให้เครื่องหลักมีสิทธิ์ Write เข้ามาได้</li>
+                        <li><strong>[Primary] ตั้ง Script ส่งไฟล์ (Sync):</strong> สร้างไฟล์ <code>sync_log.bat</code> ใช้คำสั่ง Robocopy เพื่อความทนทานต่อเน็ตหลุด (ตั้ง Task Scheduler รันทุก 5 นาที หรือรันแบบ Monitor)
+                            <pre><code>REM ส่งไฟล์ .arc โดย /Z สานต่อเมื่อเน็ตหลุด และ /MOT:5 มอนิเตอร์ไฟล์ใหม่ทุก 5 นาที
+robocopy E:\Oracle\Archive \\DR-Server\Oracle_Archive_Standby *.arc /Z /MOT:5</code></pre>
+                        </li>
+                        <li><strong>[Standby] สร้างเครื่องสำรองและรับข้อมูล:</strong> 
+                            <ul>
+                                <li>นำก้อน Backup จากเครื่องหลักมา Restore ที่เครื่อง Standby ให้ถึงแค่สถานะ <code>MOUNT</code></li>
+                                <li>สร้าง Script รันลูปอัตโนมัติ เพื่อดึง Log เข้า Database ตลอดเวลา
+                                    <pre><code>SQL> RECOVER AUTOMATIC STANDBY DATABASE;</code></pre>
+                                </li>
+                            </ul>
+                        </li>
                     </ol>
                 </div>
             </details>
 
             <details class="sub-details">
-                <summary class="sub-summary">ตาข่ายชั้นที่ 2: เขียน Script แจ้งเตือนเข้า LINE / Telegram</summary>
+                <summary class="sub-summary">วิธีที่ 2: Oracle SEHA (High Availability) <span class="badge badge-warning">ระบบไม่ล่ม</span></summary>
                 <div class="sub-content">
-                    <p>คุณสามารถนำ Script (PowerShell หรือ Python) ไปผูกกับ Task Scheduler เพื่อให้เช็คสถานะสำคัญ แล้วยิง Webhook แจ้งเตือนเข้ามือถือทีม IT ได้ทันที</p>
+                    <p><strong>หลักการ:</strong> ใช้เทคโนโลยี Cluster ทดแทน RAC โดยใช้ Server 2 เครื่องช่วยกันเฝ้า Storage ก้อนเดียวกัน ถ้าเครื่องหลักดับ เครื่องสำรองจะดึง Storage ไปรัน Service ต่อทันที (ข้อมูลไม่สูญหาย 100%) เหมาะกับ Oracle 19c SE2</p>
                     
-                    <h3>ตัวอย่าง PowerShell: เช็คพื้นที่ Archive Log แล้วแจ้งเตือน LINE</h3>
-                    <pre><code>$Token = "ใส่_LINE_NOTIFY_TOKEN_ที่นี่"
+                    <h3>ขั้นตอนการทำ</h3>
+                    <ol>
+                        <li>สร้าง <strong>Shared Disk</strong> (ใน Hyper-V ใช้ VHDX แบบ Shared Virtual Hard Disk) Mount เข้า VM ทั้ง 2 เครื่อง</li>
+                        <li>ติดตั้ง <strong>Oracle Grid Infrastructure</strong> เลือกโหมด Standalone Server (Oracle Restart) เพื่อจัดการดิสก์ด้วย ASM (Automatic Storage Management)</li>
+                        <li>ติดตั้ง Oracle Database ลงบน ASM Disk ที่แชร์ไว้ตรงกลาง</li>
+                        <li>ใช้คำสั่ง <code>srvctl add database</code> เพื่อให้ Clusterware รู้จัก หาก VM เครื่อง A ร่วง ระบบ GI จะใช้เวลาประมาณ 1-2 นาทีในการดึง Service ไปเปิดที่เครื่อง B อัตโนมัติด้วย IP เดิม</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="sub-details">
+                <summary class="sub-summary">วิธีที่ 3: Logical Replication (CDC - Change Data Capture) <span class="badge" style="background:#8b5cf6;">ยืดหยุ่นสูงสุด</span></summary>
+                <div class="sub-content">
+                    <p><strong>หลักการ:</strong> ใช้ Open Source Tool เช่น <strong>SymmetricDS</strong> ดักจับการเปลี่ยนแปลงข้อมูล (Insert/Update) "ระดับแถว (Row)" จาก Redo Log แล้วยิงผ่าน HTTP ไปยัง Database ปลายทางแบบ Real-time</p>
+                    
+                    <h3>ขั้นตอนการทำ</h3>
+                    <ol>
+                        <li>เปิด <strong>Supplemental Logging</strong> ที่เครื่องหลักเพื่อให้เก็บบันทึกข้อมูลการเปลี่ยนแปลงได้ครบถ้วน</li>
+                        <li>ติดตั้ง <strong>SymmetricDS Agent (Java)</strong> ไว้ที่เครื่อง Master และ Target</li>
+                        <li>ตั้งค่าไฟล์ <code>engine.properties</code> ระบุ DB URL, Username/Password</li>
+                        <li>กำหนด Routing ใน GUI หรือรัน Script ระบุว่า <em>"ให้จับตาดูตาราง PATIENT_INFO ถ้ามีการแก้ ให้ยิงข้อมูลไปที่เครื่อง DR"</em></li>
+                        <li><strong>จุดเด่น:</strong> เครื่อง Standby สามารถเปิดอยู่ในสถานะ Read-Write ได้ตลอดเวลา เหมาะมากสำหรับดึงข้อมูลไปทำ <strong>Dashboard, Web App หรือซิงค์ข้ามยี่ห้อ (Oracle ไป SQL Server/PostgreSQL)</strong> โดยไม่รบกวนประสิทธิภาพเครื่องหลัก</li>
+                    </ol>
+                </div>
+            </details>
+
+            <div class="box info-box" style="margin-top: 30px;">
+                <h3 style="margin-top: 0; color: #0369a1;">🏆 สรุป: เลือกวิธีไหนดีที่สุด?</h3>
+                <ul style="margin-bottom: 0; color: #0f172a;">
+                    <li><strong>Log Shipping:</strong> เหมาะสุดสำหรับคนงบจำกัด หรือเพิ่งเริ่มทำ DR Site ครั้งแรก ทำง่าย แต่อย่าลืมมอนิเตอร์เรื่องพื้นที่ดิสก์</li>
+                    <li><strong>SEHA:</strong> เหมาะสำหรับระบบ Hospital/Healthcare ที่ข้อมูลหายไม่ได้แม้แต่ Record เดียว แต่มีข้อแม้ว่าคุณต้องมีอุปกรณ์ SAN Storage ตรงกลางที่เสถียรมากๆ</li>
+                    <li><strong>CDC (SymmetricDS):</strong> เหมาะที่สุดหากคุณต้องการแยกระบบ Report ออกมา หรือมีแผนจะเอาข้อมูลไปเขียนเชื่อมกับ Google Apps Script / Web Application สมัยใหม่ครับ</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="tab8" class="tab-pane">
+            <h2>📈 8. ระบบ Monitoring & การแจ้งเตือน (Alerting)</h2>
+            <p>เพื่อป้องกันปัญหา "Archive Log เต็มจนระบบล่ม" หรือ "VM ดับโดยไม่มีคนรู้" การสร้างตาข่ายเฝ้าระวังคือสิ่งที่ IT Admin ขาดไม่ได้ครับ</p>
+
+            <details class="sub-details" open>
+                <summary class="sub-summary">1. ใช้ Checkmk มอนิเตอร์แบบรวมศูนย์</summary>
+                <div class="sub-content">
+                    <p><strong>Checkmk (Raw/Community Edition)</strong> เป็น Open Source ที่เหมาะกับงานนี้ที่สุด (สามารถติดตั้งลงบน Ubuntu Server 22.04 LTS ได้ฟรี)</p>
+                    <ol>
+                        <li><strong>Hyper-V & Windows:</strong> ติดตั้ง Checkmk Agent บน Windows Server แล้วนำไฟล์ Plugin <code>hyperv_vms.ps1</code> ไปใส่ ระบบจะดึงสถานะของ VM ทุกตัว (CPU/RAM/State) ขึ้นมาโชว์บน Dashboard ทันที</li>
+                        <li><strong>Oracle Database:</strong> ใช้ Plugin <code>mk_oracle</code> วางที่เครื่อง Database สร้าง User ให้สิทธิ์อ่าน ระบบจะตรวจสอบพื้นที่ Tablespace (ป้องกันฐานข้อมูลเต็ม), สถานะ Archive Log, และการรัน Backup ของ RMAN ให้แบบลงลึก</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="sub-details">
+                <summary class="sub-summary">2. แจ้งเตือนเข้า LINE / Telegram ด้วย PowerShell</summary>
+                <div class="sub-content">
+                    <p>ไม่ต้องรอให้คนเข้าไปดู Dashboard คุณสามารถเขียน Script ให้ระบบยิงข้อความเข้ามือถือทีม IT เวลามีปัญหาฉุกเฉินได้ (ตั้ง Task Scheduler รันทุก 10 นาที)</p>
+                    
+                    <h3>ตัวอย่างโค้ด: เช็คพื้นที่ Archive Log แล้วยิง LINE Notify</h3>
+                    <pre><code># ใส่ Token ของ LINE Notify กรุ๊ป IT
+$Token = "YOUR_LINE_NOTIFY_TOKEN_HERE"
+
+# เช็คพื้นที่ Drive E: (ที่เก็บ Archive Log)
 $Drive = Get-WmiObject Win32_LogicalDisk | Where-Object { $_.DeviceID -eq "E:" }
 $FreeSpaceGB = [math]::Round($Drive.FreeSpace / 1GB, 2)
 $TotalSpaceGB = [math]::Round($Drive.Size / 1GB, 2)
 $PercentFree = [math]::Round(($FreeSpaceGB / $TotalSpaceGB) * 100, 2)
 
+# ถ้าพื้นที่เหลือน้อยกว่า 20% ให้ส่งแจ้งเตือน
 if ($PercentFree -lt 20) {
-    $Message = "⚠️ [ALERT] พื้นที่ Archive Log (Drive E:) เหลือเพียง $PercentFree% ($FreeSpaceGB GB) กรุณาตรวจสอบด่วน!"
+    $Message = "⚠️ [CRITICAL] พื้นที่ Archive Log (Drive E:) เหลือเพียง $PercentFree% ($FreeSpaceGB GB) ระวัง Database ล่ม กรุณา Clear Log ด่วน!"
     $Params = @{
         Uri = "https://notify-api.line.me/api/notify"
         Method = "Post"
@@ -132,20 +338,36 @@ if ($PercentFree -lt 20) {
     }
     Invoke-RestMethod @Params
 }</code></pre>
-                    <p class="info-box"><strong>ไอเดียเพิ่มเติม:</strong> คุณสามารถปรับโค้ดนี้เพื่อประยุกต์ใช้กับ Telegram API โดยเปลี่ยน URL เป็น <code>https://api.telegram.org/bot[TOKEN]/sendMessage</code> เพื่อแยกห้องแจ้งเตือนสำหรับ Admin / Tech / Staff ได้อย่างเป็นระบบ</p>
+                    <p class="box warning-box" style="margin-bottom: 0;"><strong>💡 ประยุกต์ใช้:</strong> โค้ดแนวนี้สามารถนำไปแปลงเป็น Webhook สำหรับ <strong>Telegram Bot</strong> ได้เช่นกัน เพื่อแยกกลุ่มแจ้งเตือนระหว่าง "Admin" (ปัญหา Server) และ "Tech/Staff" (ปัญหาการใช้งานทั่วไป) ให้ชัดเจนขึ้นครับ</p>
                 </div>
             </details>
-
         </section>
 
         <section id="tab9" class="tab-pane">
-            <h2>💻 9. PowerShell Cheat Sheet</h2>
-            <pre><code># ตรวจสอบว่า VM ไหนกำลังเปิดอยู่บ้าง
-Get-VM | Where-Object {$_.State -eq 'Running'}
+            <h2>💻 9. PowerShell Commands (Cheat Sheet)</h2>
+            <pre><code># 1. ตรวจสอบสถานะ VM ทั้งหมดในเครื่อง (ดูว่าตัวไหนปิดอยู่)
+Get-VM | Select-Object Name, State, Uptime, CPUUsage
 
-# ดูสถานะการทำ Replication
-Get-VMReplication</code></pre>
+# 2. เริ่มต้นเปิด VM ทั้งหมดที่โดนปิดอยู่
+Get-VM | Where-Object {$_.State -eq 'Off'} | Start-VM
+
+# 3. ปิด VM อย่างปลอดภัย (ส่งคำสั่ง Shutdown ไปที่ OS ข้างใน)
+Stop-VM -Name "Oracle_DB" -Force
+
+# 4. ดูสถานะการทำ Replication (เช็ค Health ว่า DR Site ทำงานปกติไหม)
+Get-VMReplication
+
+# 5. ตรวจสอบความสมบูรณ์ของไฟล์ VHDX
+Test-VHD -Path "D:\Hyper-V\Database.vhdx"
+
+# 6. ตรวจสอบพื้นที่ว่างของฮาร์ดดิสก์ทั้งหมดในเครื่องแบบอ่านง่าย
+Get-PSDrive C,D,E | Select-Object Name, @{n='Used(GB)';e={[math]::round($_.Used/1GB,2)}}, @{n='Free(GB)';e={[math]::round($_.Free/1GB,2)}}</code></pre>
+            
+            <div class="box warning-box">
+                <strong>💡 ข้อแนะนำทิ้งท้าย:</strong> ไม่ควรเก็บ Snapshot (Checkpoint) ของ VM ทิ้งไว้นานเกิน 24-48 ชั่วโมง เพราะนอกจากจะทำให้กินพื้นที่ฮาร์ดดิสก์แล้ว ไฟล์ VHDX จะแตกแขนง (Differencing Disk) ทำให้ความเร็ว I/O ของระบบ Oracle ลดลงอย่างหนักจน User บ่นว่าระบบช้าได้ครับ
+            </div>
         </section>
+
     </main>
 </div>
 
@@ -153,12 +375,20 @@ Get-VMReplication</code></pre>
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tab-pane");
-        for (i = 0; i < tabcontent.length; i++) { tabcontent[i].classList.remove("active"); }
+        for (i = 0; i < tabcontent.length; i++) { 
+            tabcontent[i].classList.remove("active"); 
+        }
         tablinks = document.getElementsByClassName("nav-btn");
-        for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
+        for (i = 0; i < tablinks.length; i++) { 
+            tablinks[i].classList.remove("active"); 
+        }
         document.getElementById(tabName).classList.add("active");
         evt.currentTarget.classList.add("active");
-        if(window.innerWidth <= 900) { window.scrollTo({ top: document.querySelector('.main-content').offsetTop - 20, behavior: 'smooth' }); }
+        
+        // Auto-scroll on mobile devices
+        if(window.innerWidth <= 900) { 
+            window.scrollTo({ top: document.querySelector('.main-content').offsetTop - 20, behavior: 'smooth' }); 
+        }
     }
 </script>
 
