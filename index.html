@@ -10,20 +10,23 @@
             --primary: #1e40af; --primary-dark: #1e3a8a; --bg-color: #f1f5f9;
             --text-dark: #1e293b; --text-light: #475569; --accent: #e2e8f0;
             --active-bg: #eff6ff; --danger: #ef4444; --warning: #f59e0b; --success: #22c55e;
+            --purple: #8b5cf6;
         }
         * { box-sizing: border-box; }
         body { font-family: 'Prompt', sans-serif; background-color: var(--bg-color); color: var(--text-dark); line-height: 1.6; margin: 0; padding: 20px; font-size: 16px; }
-        .header { text-align: center; padding: 35px 15px; background: var(--primary); color: white; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        
+        .header { text-align: center; padding: 35px 15px; background: var(--primary); color: white; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); max-width: 1280px; margin-left: auto; margin-right: auto;}
         .header h1 { margin: 0; font-size: 2.2rem; line-height: 1.2; }
         .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 1.1rem; }
         
         .layout-wrapper { display: flex; gap: 25px; max-width: 1280px; margin: 0 auto; align-items: flex-start; }
         
         /* Sidebar */
-        .sidebar { flex: 0 0 300px; background: #ffffff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); position: sticky; top: 20px; }
-        .nav-btn { display: block; width: 100%; text-align: left; background: transparent; border: none; padding: 14px 16px; margin-bottom: 6px; font-weight: 600; cursor: pointer; border-radius: 8px; border-left: 4px solid transparent; transition: 0.2s; font-size: 0.95rem; font-family: 'Prompt', sans-serif;}
+        .sidebar { flex: 0 0 320px; background: #ffffff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); position: sticky; top: 20px; }
+        .nav-btn { display: flex; align-items: center; width: 100%; text-align: left; background: transparent; border: none; padding: 14px 16px; margin-bottom: 6px; font-weight: 600; cursor: pointer; border-radius: 8px; border-left: 4px solid transparent; transition: 0.2s; font-size: 0.95rem; font-family: 'Prompt', sans-serif;}
         .nav-btn:hover { background-color: var(--accent); }
         .nav-btn.active { background-color: var(--active-bg); color: var(--primary); border-left: 4px solid var(--primary); }
+        .nav-icon { margin-right: 10px; width: 20px; text-align: center; }
         
         /* Main Content */
         .main-content { flex: 1; background: #ffffff; border-radius: 12px; padding: 35px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); min-height: 70vh; }
@@ -31,16 +34,17 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         
         /* Typography & Elements */
-        h2 { color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 12px; font-size: 1.6rem;}
+        h2 { color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--accent); padding-bottom: 12px; font-size: 1.6rem; display: flex; align-items: center; gap: 10px;}
         h3 { color: var(--text-dark); margin-top: 25px; font-size: 1.2rem;}
         ul, ol { padding-left: 20px; margin-bottom: 15px; }
-        li { margin-bottom: 8px; }
+        li { margin-bottom: 10px; }
         
         .ui-btn { background: var(--bg-color); color: var(--text-dark); padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; border: 1px solid #cbd5e0; font-family: monospace;}
         .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; color: white; font-weight: 600; margin-left: 8px; }
         .badge-success { background: var(--success); }
         .badge-warning { background: var(--warning); color: #fff;}
         .badge-danger { background: var(--danger); }
+        .badge-purple { background: var(--purple); }
         
         /* Boxes */
         .box { padding: 20px; border-radius: 8px; margin-top: 20px; margin-bottom: 20px; font-size: 0.95rem; }
@@ -58,31 +62,35 @@
         details[open] > summary.sub-summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: 1px solid var(--accent); }
         .sub-content { padding: 20px; background: #ffffff; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
 
-        @media (max-width: 900px) { .layout-wrapper { flex-direction: column; } .sidebar { width: 100%; position: relative; top: 0; display: flex; flex-wrap: wrap; gap: 8px; } .nav-btn { flex: 1 1 calc(50% - 8px); padding: 12px; font-size: 0.9rem; text-align: center; border-left: none; border-bottom: 4px solid transparent; } .nav-btn.active { border-left: none; border-bottom: 4px solid var(--primary); } }
+        @media (max-width: 900px) { .layout-wrapper { flex-direction: column; } .sidebar { width: 100%; position: relative; top: 0; display: flex; flex-wrap: wrap; gap: 8px; } .nav-btn { flex: 1 1 calc(50% - 8px); padding: 12px; font-size: 0.9rem; border-left: none; border-bottom: 4px solid transparent; } .nav-btn.active { border-left: none; border-bottom: 4px solid var(--primary); } }
         @media (max-width: 600px) { .nav-btn { flex: 1 1 100%; } }
     </style>
 </head>
 <body>
 
-<div class="header" style="max-width: 1280px; margin: 0 auto 25px auto;">
+<div class="header">
     <h1>IT Admin Guide: Infrastructure & HA</h1>
-    <p>Hyper-V, Oracle Database & Monitoring System</p>
+    <p>Hyper-V, Oracle Database & Monitoring System (Full Edition)</p>
 </div>
 
 <div class="layout-wrapper">
     <nav class="sidebar">
-        <button class="nav-btn active" onclick="openTab(event, 'tab1')">🛠️ 1. ติดตั้ง Hyper-V</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab2')">💾 2. การ Backup VM</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab3')">🔄 3. DR Site (Replication)</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab4')">🔌 4. แก้ปัญหา Network</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab5')">🛢️ 5. สเปค VM สำหรับ Oracle</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab6')">🛡️ 6. Backup Oracle (ฟรี)</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab7')">🔗 7. Replicate Oracle (ฉบับเจาะลึก)</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab8')">📈 8. Monitoring & Alert <span class="badge badge-success">New!</span></button>
-        <button class="nav-btn" onclick="openTab(event, 'tab9')">💻 9. PowerShell Commands</button>
+        <button class="nav-btn active" onclick="openTab(event, 'tab1')"><span class="nav-icon">🛠️</span> 1. ติดตั้ง Hyper-V</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab2')"><span class="nav-icon">💾</span> 2. การ Backup VM</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab3')"><span class="nav-icon">🔄</span> 3. DR Site (Replication)</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab4')"><span class="nav-icon">🔌</span> 4. แก้ปัญหา Network</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab5')"><span class="nav-icon">🛢️</span> 5. สเปค VM สำหรับ Oracle</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab6')"><span class="nav-icon">🛡️</span> 6. Backup Oracle (ฟรี)</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab7')"><span class="nav-icon">🔗</span> 7. Replicate Oracle <span class="badge badge-primary" style="background:#3b82f6;">เจาะลึก</span></button>
+        <button class="nav-btn" onclick="openTab(event, 'tab8')"><span class="nav-icon">📈</span> 8. Monitoring & Alert</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab9')"><span class="nav-icon">💻</span> 9. PowerShell Commands</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab10')"><span class="nav-icon">🚀</span> 10. Performance Tuning <span class="badge badge-success">Pro</span></button>
+        <button class="nav-btn" onclick="openTab(event, 'tab11')"><span class="nav-icon">🔒</span> 11. Security & Hardening <span class="badge badge-success">Pro</span></button>
+        <button class="nav-btn" onclick="openTab(event, 'tab12')"><span class="nav-icon">⏪</span> 12. Oracle Flashback <span class="badge badge-success">Pro</span></button>
     </nav>
 
     <main class="main-content">
+        
         <section id="tab1" class="tab-pane active">
             <h2>🛠️ 1. การติดตั้ง Hyper-V แบบละเอียด</h2>
             <p>ตรวจสอบใน BIOS ของ Server ว่าเปิด <strong>Virtualization (VT-x / AMD-V)</strong> เรียบร้อยแล้ว</p>
@@ -116,7 +124,7 @@
                 <li>ติดตั้ง <span class="ui-btn">Veeam Backup & Replication</span> (สามารถโหลดเวอร์ชัน Community มาใช้ได้ฟรีสำหรับ 10 Workloads)</li>
                 <li>เพิ่ม Hyper-V Server ของคุณเข้าไปในระบบของ Veeam</li>
                 <li>สร้าง Backup Job และเลือก VM ที่ต้องการ</li>
-                <li><strong>จุดเด่น:</strong> แนะนำให้เปิดฟีเจอร์ <strong>Application-aware processing</strong> ตอนสร้าง Job ด้วย เพื่อให้ระบบ Backup ทำงานประสานกับ Database ภายใน VM ได้อย่างสมบูรณ์ (VSS Integration)</li>
+                <li><strong>จุดเด่น:</strong> แนะนำให้เปิดฟีเจอร์ <strong>Application-aware processing</strong> ตอนสร้าง Job ด้วย เพื่อให้ระบบ Backup ทำงานประสานกับ Database ภายใน VM ได้อย่างสมบูรณ์ (VSS Integration) ไม่ทำให้ไฟล์ฐานข้อมูลพัง</li>
             </ul>
         </section>
 
@@ -146,7 +154,7 @@
             <h2>🔌 4. แก้ปัญหา VM มองไม่เห็น Network</h2>
             
             <h3>1. ปัญหาเน็ตหลุดสุ่มๆ หรือ Ping ไม่เจอ (ปิด VMQ) <span class="badge badge-warning">เจอบ่อยมาก</span></h3>
-            <p>มักเกิดกับ Server ที่ใช้การ์ดแลนของ Broadcom ที่ฟีเจอร์ Virtual Machine Queue (VMQ) ทำงานผิดปกติ ให้แก้ดังนี้:</p>
+            <p>มักเกิดกับ Server ที่ใช้การ์ดแลนของ Broadcom (หรือการ์ด Enterprise บางรุ่น) ที่ฟีเจอร์ Virtual Machine Queue (VMQ) ทำงานผิดปกติ ให้แก้ดังนี้:</p>
             <ol>
                 <li>คลิกขวาที่ VM ที่มีปัญหา > เลือก <span class="ui-btn">Settings...</span></li>
                 <li>กางเมนู Network Adapter ออกมา > คลิกที่ <span class="ui-btn">Hardware Acceleration</span></li>
@@ -225,8 +233,8 @@ expdp system/password schemas=HR directory=BACKUP_DIR dumpfile=hr_backup.dmp</co
                     <div class="box critical-box" style="margin-top: 10px;">
                         <strong>🚨 ข้อควรระวัง (จุดตายของวิธีนี้)</strong>
                         <ul style="margin-bottom: 0;">
-                            <li><strong>ORA-00257:</strong> หาก Drive ที่เก็บ Archive Log ฝั่ง Primary "พื้นที่เต็ม" Database จะหยุดชะงัก (Hang) ทันที ต้องทำ Housekeeping คอยลบไฟล์เก่าเสมอ</li>
-                            <li><strong>Log Gap:</strong> ห้ามไฟล์ระหว่างทางหายหรือข้ามลำดับ (Sequence) เพราะเครื่อง Standby จะหยุดซิงค์ข้อมูลต่อทันที</li>
+                            <li><strong>ORA-00257 (พื้นที่เต็ม):</strong> หาก Drive ที่เก็บ Archive Log ฝั่ง Primary "พื้นที่เต็ม" Database จะหยุดชะงัก (Hang) ทันที ต้องทำ Housekeeping คอยลบไฟล์เก่าเสมอ</li>
+                            <li><strong>Log Gap (ไฟล์แหว่ง):</strong> ห้ามไฟล์ระหว่างทางหายหรือข้ามลำดับ (Sequence) เพราะเครื่อง Standby จะหยุดซิงค์ข้อมูลต่อทันที</li>
                         </ul>
                     </div>
 
@@ -246,7 +254,7 @@ robocopy E:\Oracle\Archive \\DR-Server\Oracle_Archive_Standby *.arc /Z /MOT:5</c
                         </li>
                         <li><strong>[Standby] สร้างเครื่องสำรองและรับข้อมูล:</strong> 
                             <ul>
-                                <li>นำก้อน Backup จากเครื่องหลักมา Restore ที่เครื่อง Standby ให้ถึงแค่สถานะ <code>MOUNT</code></li>
+                                <li>นำก้อน Backup จากเครื่องหลักมา Restore ที่เครื่อง Standby ให้ถึงแค่สถานะ <code>MOUNT</code> (ห้าม Open)</li>
                                 <li>สร้าง Script รันลูปอัตโนมัติ เพื่อดึง Log เข้า Database ตลอดเวลา
                                     <pre><code>SQL> RECOVER AUTOMATIC STANDBY DATABASE;</code></pre>
                                 </li>
@@ -266,22 +274,25 @@ robocopy E:\Oracle\Archive \\DR-Server\Oracle_Archive_Standby *.arc /Z /MOT:5</c
                         <li>สร้าง <strong>Shared Disk</strong> (ใน Hyper-V ใช้ VHDX แบบ Shared Virtual Hard Disk) Mount เข้า VM ทั้ง 2 เครื่อง</li>
                         <li>ติดตั้ง <strong>Oracle Grid Infrastructure</strong> เลือกโหมด Standalone Server (Oracle Restart) เพื่อจัดการดิสก์ด้วย ASM (Automatic Storage Management)</li>
                         <li>ติดตั้ง Oracle Database ลงบน ASM Disk ที่แชร์ไว้ตรงกลาง</li>
-                        <li>ใช้คำสั่ง <code>srvctl add database</code> เพื่อให้ Clusterware รู้จัก หาก VM เครื่อง A ร่วง ระบบ GI จะใช้เวลาประมาณ 1-2 นาทีในการดึง Service ไปเปิดที่เครื่อง B อัตโนมัติด้วย IP เดิม</li>
+                        <li>ใช้คำสั่ง <code>srvctl add database</code> เพื่อให้ Clusterware รู้จัก หาก VM เครื่อง A ร่วง ระบบ GI จะตรวจสอบพบว่าเน็ตเวิร์กขาดหาย และจะทำการ Start Oracle Service ขึ้นมาใหม่บน VM เครื่อง B อัตโนมัติด้วย IP เดิม</li>
                     </ol>
                 </div>
             </details>
 
             <details class="sub-details">
-                <summary class="sub-summary">วิธีที่ 3: Logical Replication (CDC - Change Data Capture) <span class="badge" style="background:#8b5cf6;">ยืดหยุ่นสูงสุด</span></summary>
+                <summary class="sub-summary">วิธีที่ 3: Logical Replication (CDC - Change Data Capture) <span class="badge badge-purple">ยืดหยุ่นสูงสุด</span></summary>
                 <div class="sub-content">
                     <p><strong>หลักการ:</strong> ใช้ Open Source Tool เช่น <strong>SymmetricDS</strong> ดักจับการเปลี่ยนแปลงข้อมูล (Insert/Update) "ระดับแถว (Row)" จาก Redo Log แล้วยิงผ่าน HTTP ไปยัง Database ปลายทางแบบ Real-time</p>
                     
                     <h3>ขั้นตอนการทำ</h3>
                     <ol>
-                        <li>เปิด <strong>Supplemental Logging</strong> ที่เครื่องหลักเพื่อให้เก็บบันทึกข้อมูลการเปลี่ยนแปลงได้ครบถ้วน</li>
+                        <li>เปิด <strong>Supplemental Logging</strong> ที่เครื่องหลักเพื่อให้เก็บบันทึกข้อมูลการเปลี่ยนแปลงได้ครบถ้วน
+                            <pre><code>SQL> ALTER DATABASE ADD SUPPLEMENTAL LOG DATA;</code></pre>
+                        </li>
                         <li>ติดตั้ง <strong>SymmetricDS Agent (Java)</strong> ไว้ที่เครื่อง Master และ Target</li>
                         <li>ตั้งค่าไฟล์ <code>engine.properties</code> ระบุ DB URL, Username/Password</li>
                         <li>กำหนด Routing ใน GUI หรือรัน Script ระบุว่า <em>"ให้จับตาดูตาราง PATIENT_INFO ถ้ามีการแก้ ให้ยิงข้อมูลไปที่เครื่อง DR"</em></li>
+                        <li>สั่ง Start Service: <code>sym --engine corp-000 --port 31415</code></li>
                         <li><strong>จุดเด่น:</strong> เครื่อง Standby สามารถเปิดอยู่ในสถานะ Read-Write ได้ตลอดเวลา เหมาะมากสำหรับดึงข้อมูลไปทำ <strong>Dashboard, Web App หรือซิงค์ข้ามยี่ห้อ (Oracle ไป SQL Server/PostgreSQL)</strong> โดยไม่รบกวนประสิทธิภาพเครื่องหลัก</li>
                     </ol>
                 </div>
@@ -290,9 +301,9 @@ robocopy E:\Oracle\Archive \\DR-Server\Oracle_Archive_Standby *.arc /Z /MOT:5</c
             <div class="box info-box" style="margin-top: 30px;">
                 <h3 style="margin-top: 0; color: #0369a1;">🏆 สรุป: เลือกวิธีไหนดีที่สุด?</h3>
                 <ul style="margin-bottom: 0; color: #0f172a;">
-                    <li><strong>Log Shipping:</strong> เหมาะสุดสำหรับคนงบจำกัด หรือเพิ่งเริ่มทำ DR Site ครั้งแรก ทำง่าย แต่อย่าลืมมอนิเตอร์เรื่องพื้นที่ดิสก์</li>
+                    <li><strong>Log Shipping:</strong> เหมาะสุดสำหรับคนงบจำกัด หรือเพิ่งเริ่มทำ DR Site ครั้งแรก ทำง่าย แต่อย่าลืมมอนิเตอร์เรื่องพื้นที่ดิสก์อย่างเคร่งครัด</li>
                     <li><strong>SEHA:</strong> เหมาะสำหรับระบบ Hospital/Healthcare ที่ข้อมูลหายไม่ได้แม้แต่ Record เดียว แต่มีข้อแม้ว่าคุณต้องมีอุปกรณ์ SAN Storage ตรงกลางที่เสถียรมากๆ</li>
-                    <li><strong>CDC (SymmetricDS):</strong> เหมาะที่สุดหากคุณต้องการแยกระบบ Report ออกมา หรือมีแผนจะเอาข้อมูลไปเขียนเชื่อมกับ Google Apps Script / Web Application สมัยใหม่ครับ</li>
+                    <li><strong>CDC (SymmetricDS):</strong> เหมาะที่สุดหากคุณต้องการแยกระบบ Report ออกมา หรือมีแผนจะเอาข้อมูลไปเขียนเชื่อมกับ Web Application สมัยใหม่ครับ</li>
                 </ul>
             </div>
         </section>
@@ -368,24 +379,139 @@ Get-PSDrive C,D,E | Select-Object Name, @{n='Used(GB)';e={[math]::round($_.Used/
             </div>
         </section>
 
+        <section id="tab10" class="tab-pane">
+            <h2>🚀 10. Performance Tuning (ปรับจูนระดับสูง)</h2>
+            <p>เพื่อรีดประสิทธิภาพฮาร์ดแวร์ให้ Database ทำงานได้เร็วที่สุด ไม่คอขวด</p>
+
+            <details class="sub-details" open>
+                <summary class="sub-summary">Hyper-V: การจัดการ NUMA Node และ Storage QoS</summary>
+                <div class="sub-content">
+                    <h3>1. ปิด NUMA Spanning (ถ้า VM ใหญ่พอ)</h3>
+                    <p>สถาปัตยกรรม CPU ของ Server จะแบ่ง Memory เป็นโซนๆ (NUMA) หาก VM ดึง RAM ข้ามโซนจะทำให้เกิด Latency อย่างหนักกับ Oracle</p>
+                    <ol>
+                        <li>ไปที่ Hyper-V Settings ของ Host > เลือก <strong>NUMA Spanning</strong></li>
+                        <li>หากคุณคำนวณแล้วว่า RAM ของ VM ไม่เกิน RAM ของ 1 CPU Socket (เช่น CPU มี 64GB และ VM ใช้ 32GB) <strong>ให้เอาติ๊กถูกออก</strong> จาก Allow virtual machines to span physical NUMA nodes</li>
+                    </ol>
+
+                    <h3>2. เปิดใช้งาน Storage QoS (Quality of Service)</h3>
+                    <p>ป้องกันปัญหา "Noisy Neighbor" (VM ตัวอื่นแย่งเขียนดิสก์จน Oracle ค้าง)</p>
+                    <ul>
+                        <li>ไปที่ Settings ของ VM (ตัวอื่นที่ไม่ใช่ Oracle) > Hard Drive > Advanced Features > ติ๊ก <strong>Enable Quality of Service management</strong> แล้วตั้งค่า Maximum IOPS เพื่อจำกัดความเร็วไม่ให้รบกวน DB</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="sub-details">
+                <summary class="sub-summary">Oracle: การตั้งค่า Memory แบบ ASMM</summary>
+                <div class="sub-content">
+                    <p>บน Windows Server การปล่อยให้ Oracle จัดการ RAM เองทั้งหมด (AMM) มักมีปัญหา</p>
+                    <ol>
+                        <li><strong>ปิด AMM:</strong> ให้ตั้งค่า <code>MEMORY_TARGET</code> และ <code>MEMORY_MAX_TARGET</code> เป็น 0</li>
+                        <li><strong>ใช้ ASMM แทน:</strong> ให้ระบุค่า SGA และ PGA แยกกันอย่างชัดเจน เช่น:
+                            <pre><code>SQL> ALTER SYSTEM SET SGA_TARGET=6G SCOPE=SPFILE;
+SQL> ALTER SYSTEM SET PGA_AGGREGATE_TARGET=2G SCOPE=SPFILE;</code></pre>
+                        </li>
+                        <li><strong>Lock Pages in Memory:</strong> ใน Windows Group Policy (secpol.msc) ให้เพิ่ม User ของ Oracle เข้าไปในสิทธิ์ <em>"Lock pages in memory"</em> เพื่อไม่ให้ Windows นำ RAM ของ Database ไปเขียนลง Pagefile (Disk) เด็ดขาด</li>
+                    </ol>
+                </div>
+            </details>
+        </section>
+
+        <section id="tab11" class="tab-pane">
+            <h2>🔒 11. Security & Hardening (ป้องกัน Ransomware & เจาะระบบ)</h2>
+            
+            <details class="sub-details" open>
+                <summary class="sub-summary">การปกป้องระดับ Hyper-V</summary>
+                <div class="sub-content">
+                    <ul>
+                        <li><strong>แยก Network สำหรับ Management:</strong> การ์ดแลนที่ใช้ Remote Desktop/Manage Hyper-V ควรอยู่คนละวง VLAN กับที่ VM ใช้ออกเน็ตหรือให้บริการ</li>
+                        <li><strong>Ransomware Protection (3-2-1 Rule):</strong> Backup ต้องไม่อยู่บน Server ตัวเอง <br>
+                        ใช้ Veeam ทำงานแบบ <em>"Immutable Backup"</em> (เขียนทับ/ลบไม่ได้แม้โดนแฮก) โดยโยนไฟล์ไปเก็บบน S3 Object Storage หรือ Server Linux ที่ปิด Root Access</li>
+                        <li><strong>Production Checkpoints:</strong> ไปที่ Settings ของ VM > Checkpoints > <strong>บังคับเลือก Production Checkpoints</strong> (ปิด Standard) เพื่อให้ระบบใช้ VSS Backup อย่างปลอดภัย ไม่เกิดปัญหาข้อมูลเละเวลา Revert</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="sub-details">
+                <summary class="sub-summary">การปกป้องระดับ Oracle Database</summary>
+                <div class="sub-content">
+                    <ul>
+                        <li><strong>เปลี่ยน Port มาตรฐาน:</strong> Hacker มักสแกนหา Port 1521 ให้แก้ไฟล์ <code>listener.ora</code> และ <code>tnsnames.ora</code> เปลี่ยนไปใช้ Port อื่นเช่น 15214</li>
+                        <li><strong>เข้ารหัสไฟล์ Backup RMAN (ฟรี):</strong> ป้องกันคนแอบก๊อปปี้ไฟล์ .dmp หรือ .arc ไปเปิดอ่านเครื่องอื่น
+                            <pre><code>RMAN> SET ENCRYPTION ON IDENTIFIED BY 'MySecretPass123' ONLY;
+RMAN> BACKUP DATABASE PLUS ARCHIVELOG;</code></pre>
+                            <em>(เวลา Restore จะต้องใส่ Password นี้ก่อนเสมอ)</em>
+                        </li>
+                        <li><strong>จำกัด IP ที่เข้าถึง DB:</strong> ตั้งค่า <code>sqlnet.ora</code> เพื่ออนุญาตเฉพาะ IP ของ App Server หรือ Admin เท่านั้น
+                            <pre><code>tcp.validnode_checking = yes
+tcp.invited_nodes = (192.168.1.50, 192.168.1.99)</code></pre>
+                        </li>
+                    </ul>
+                </div>
+            </details>
+        </section>
+
+        <section id="tab12" class="tab-pane">
+            <h2>⏪ 12. Oracle Flashback (ไทม์แมชชีนกู้ชีพ)</h2>
+            <p>ฟีเจอร์ฟรีใน Standard Edition ที่ช่วยชีวิต Admin เวลา User ทำผิดพลาด (เช่น ลบตาราง หรืออัปเดตข้อมูลผิด) โดยไม่ต้องเสียเวลา Restore ระบบใหม่ครึ่งวัน</p>
+
+            <details class="sub-details" open>
+                <summary class="sub-summary">1. กู้ข้อมูลที่เพิ่ง UPDATE ผิด (Flashback Query)</summary>
+                <div class="sub-content">
+                    <p>สมมติมีคนเผลอ รัน <code>UPDATE EMPLOYEES SET SALARY = 0;</code> แล้ว Commit ไปเมื่อ 15 นาทีที่แล้ว</p>
+                    <ol>
+                        <li>ใช้คำสั่งนี้ดึงข้อมูลย้อนหลัง ณ เวลาที่ระบุ (ดึงจาก Undo Tablespace)
+                            <pre><code>SELECT * FROM EMPLOYEES AS OF TIMESTAMP (SYSTIMESTAMP - INTERVAL '15' MINUTE);</code></pre>
+                        </li>
+                        <li>ถ้าข้อมูลถูกต้อง ให้สร้างตารางสำรองมารับข้อมูลนี้ แล้วค่อยนำไปอัปเดตกลับคืน
+                            <pre><code>CREATE TABLE EMP_RECOVERY AS 
+SELECT * FROM EMPLOYEES AS OF TIMESTAMP (SYSTIMESTAMP - INTERVAL '15' MINUTE);</code></pre>
+                        </li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="sub-details">
+                <summary class="sub-summary">2. กู้ตารางที่เผลอ DROP ทิ้ง (Recycle Bin)</summary>
+                <div class="sub-content">
+                    <p>Oracle ตั้งแต่เวอร์ชัน 10g มีถังขยะในตัว ถ้าใครเผลอ <code>DROP TABLE CUSTOMERS;</code> ตารางจะไม่หายไปจริงๆ ทันที</p>
+                    <ol>
+                        <li>เช็คดูว่ามีอะไรในถังขยะบ้าง
+                            <pre><code>SQL> SHOW RECYCLEBIN;</code></pre>
+                        </li>
+                        <li>สั่งกู้คืนตารางกลับมาทันที พร้อมข้อมูลครบถ้วน!
+                            <pre><code>SQL> FLASHBACK TABLE CUSTOMERS TO BEFORE DROP;</code></pre>
+                        </li>
+                        <li><em>(หากต้องการลบตารางแบบไม่ให้ลงถังขยะ ต้องต่อท้ายด้วย <code>PURGE</code> เช่น <code>DROP TABLE CUSTOMERS PURGE;</code>)</em></li>
+                    </ol>
+                </div>
+            </details>
+        </section>
+
     </main>
 </div>
 
 <script>
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
+        
+        // Hide all tab content
         tabcontent = document.getElementsByClassName("tab-pane");
         for (i = 0; i < tabcontent.length; i++) { 
             tabcontent[i].classList.remove("active"); 
         }
+        
+        // Remove active class from all buttons
         tablinks = document.getElementsByClassName("nav-btn");
         for (i = 0; i < tablinks.length; i++) { 
             tablinks[i].classList.remove("active"); 
         }
+        
+        // Show the current tab and add active class to the button
         document.getElementById(tabName).classList.add("active");
         evt.currentTarget.classList.add("active");
         
-        // Auto-scroll on mobile devices
+        // Auto-scroll to top of content on mobile devices
         if(window.innerWidth <= 900) { 
             window.scrollTo({ top: document.querySelector('.main-content').offsetTop - 20, behavior: 'smooth' }); 
         }
