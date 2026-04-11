@@ -9,144 +9,142 @@
         :root {
             --primary: #0056b3; --primary-dark: #004494; --bg-color: #f0f4f8;
             --text-dark: #2d3748; --text-light: #4a5568; --accent: #e2e8f0;
-            --active-bg: #ebf4ff; --danger: #dc3545; --warning: #ffc107;
+            --active-bg: #ebf4ff; --danger: #dc3545; --warning: #ffc107; --success: #28a745;
         }
         * { box-sizing: border-box; }
         body { font-family: 'Prompt', sans-serif; background-color: var(--bg-color); color: var(--text-dark); line-height: 1.6; margin: 0; padding: 20px; font-size: 16px; }
         .header { text-align: center; padding: 30px 15px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-radius: 12px; margin-bottom: 20px; }
         .layout-wrapper { display: flex; gap: 20px; max-width: 1200px; margin: 0 auto; align-items: flex-start; }
         .sidebar { flex: 0 0 300px; background: #ffffff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: sticky; top: 20px; }
-        .nav-btn { display: block; width: 100%; text-align: left; background: transparent; border: none; padding: 15px 20px; margin-bottom: 5px; font-weight: 600; cursor: pointer; border-radius: 8px; border-left: 4px solid transparent; transition: 0.3s; }
+        .nav-btn { display: block; width: 100%; text-align: left; background: transparent; border: none; padding: 12px 15px; margin-bottom: 5px; font-weight: 600; cursor: pointer; border-radius: 8px; border-left: 4px solid transparent; transition: 0.3s; font-size: 0.95rem; }
+        .nav-btn:hover { background-color: var(--accent); }
         .nav-btn.active { background-color: var(--active-bg); color: var(--primary); border-left: 4px solid var(--primary); }
-        .main-content { flex: 1; background: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .main-content { flex: 1; background: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); min-height: 70vh; }
         .tab-pane { display: none; } .tab-pane.active { display: block; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Step styles */
         details.sub-details { background: #f8fafc; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--accent); }
         summary.sub-summary { padding: 15px; font-weight: 600; cursor: pointer; background: #f1f5f9; border-radius: 8px; display: flex; align-items: center; }
         summary.sub-summary::before { content: '▶'; font-size: 0.8rem; margin-right: 10px; color: var(--primary); transition: 0.2s; }
         details[open] > summary.sub-summary::before { transform: rotate(90deg); }
         .sub-content { padding: 20px; background: #ffffff; }
         
-        pre { background-color: #2d3748; color: #f8f8f2; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: monospace; }
+        pre { background-color: #2d3748; color: #f8f8f2; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: monospace; font-size: 0.95rem;}
         .warning-box { background-color: #fff3cd; color: #856404; padding: 20px; border-radius: 8px; border-left: 6px solid var(--warning); margin-top: 20px; }
         .critical-box { background-color: #fde8e8; color: #9b1c1c; padding: 20px; border-radius: 8px; border-left: 6px solid var(--danger); margin-top: 20px; }
-        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; color: white; font-weight: bold; }
-        .badge-step { background: var(--primary); }
+        .info-box { background-color: #e0f2fe; color: #0369a1; padding: 20px; border-radius: 8px; border-left: 6px solid #38bdf8; margin-top: 20px; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; color: white; font-weight: bold; margin-left: 5px; }
+        .badge-step { background: var(--primary); margin-left: 0; margin-right: 10px; }
+        .badge-free { background: var(--success); }
         
+        h2 { border-bottom: 2px solid var(--accent); padding-bottom: 10px; color: var(--primary); }
+        h3 { margin-top: 25px; }
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        .ui-btn { background: var(--accent); padding: 2px 6px; border-radius: 4px; border: 1px solid #cbd5e0; font-family: monospace; font-size: 0.9em; }
+
         @media (max-width: 900px) { .layout-wrapper { flex-direction: column; } .sidebar { width: 100%; position: relative; display: flex; flex-wrap: wrap; } .nav-btn { flex: 1 1 48%; } }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>IT Admin Guide: High Availability</h1>
-    <p>Oracle Database & Hyper-V Management System</p>
+<div class="header" style="max-width: 1200px; margin: 0 auto 20px auto;">
+    <h1>IT Admin Guide: Infrastructure & HA</h1>
+    <p>Hyper-V, Oracle Database & Monitoring System</p>
 </div>
 
 <div class="layout-wrapper">
     <nav class="sidebar">
         <button class="nav-btn active" onclick="openTab(event, 'tab1')">🛠️ 1. ติดตั้ง Hyper-V</button>
         <button class="nav-btn" onclick="openTab(event, 'tab2')">💾 2. การ Backup VM</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab7')">🔗 3. Replicate Oracle (Deep Dive)</button>
-        <button class="nav-btn" onclick="openTab(event, 'tab8')">💻 4. PowerShell Cheat Sheet</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab3')">🔄 3. DR Site (Replication)</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab4')">🔌 4. แก้ปัญหา Network</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab5')">🛢️ 5. สเปค VM สำหรับ Oracle</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab6')">🛡️ 6. Backup Oracle (ฟรี)</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab7')">🔗 7. Replicate Oracle (ฉบับเจาะลึก)</button>
+        <button class="nav-btn" onclick="openTab(event, 'tab8')">📈 8. Monitoring & Alert <span class="badge badge-free">New!</span></button>
+        <button class="nav-btn" onclick="openTab(event, 'tab9')">💻 9. PowerShell Commands</button>
     </nav>
 
     <main class="main-content">
         <section id="tab1" class="tab-pane active">
-            <h2>🛠️ 1. ติดตั้ง Hyper-V</h2>
-            <p>ติดตั้งผ่าน Server Manager > Add Roles and Features > Hyper-V</p>
+            <h2>🛠️ 1. ติดตั้ง Hyper-V แบบละเอียด</h2>
+            <ol>
+                <li>เปิด <span class="ui-btn">Server Manager</span> > Add roles and features</li>
+                <li>ติ๊กถูกที่ช่อง <strong>Hyper-V</strong></li>
+                <li><strong>Default Stores:</strong> เปลี่ยน Path ที่เก็บไฟล์ VHDX ไป Drive อื่นที่ไม่ใช่ C:</li>
+                <li>กด Install และ Restart</li>
+            </ol>
+            <div class="info-box"><strong>💡 Pro Tip:</strong> แนะนำให้ใช้ <strong>Windows Admin Center (WAC)</strong> ซึ่งเป็น Web GUI ฟรีของ Microsoft มาติดตั้งเพื่อจัดการ Hyper-V แทน Server Manager จะช่วยให้ดูหน้าจอและจัดการ VM ได้ง่ายขึ้นมาก</div>
         </section>
 
-        <section id="tab2" class="tab-pane">
-            <h2>💾 2. Backup VM</h2>
-            <p>ใช้ Veeam Community Edition สำหรับการ Backup ระดับ Image</p>
-        </section>
+        <section id="tab2" class="tab-pane"><h2>💾 2. วิธีการ Backup VM</h2><p>แนะนำ Veeam Community Edition...</p></section>
+        <section id="tab3" class="tab-pane"><h2>🔄 3. การทำ Replication (DR Site ระดับ VM)</h2><p>ตั้งค่า Replica Broker...</p></section>
+        <section id="tab4" class="tab-pane"><h2>🔌 4. แก้ปัญหา VM มองไม่เห็น Network</h2><p>ปิดฟีเจอร์ Enable virtual machine queue...</p></section>
+        <section id="tab5" class="tab-pane"><h2>🛢️ 5. ตั้งค่า VM สำหรับ Oracle Database</h2><p>ห้ามใช้ Dynamic Memory และใช้ VHDX แบบ Fixed Size...</p></section>
+        <section id="tab6" class="tab-pane"><h2>🛡️ 6. Backup Oracle (ฉบับฟรี)</h2><p>รัน RMAN Backup เป็น Script...</p></section>
 
         <section id="tab7" class="tab-pane">
-            <h2>🔗 3. เจาะลึกการทำ Replicate Oracle (ฉบับสมบูรณ์)</h2>
-            
-            <details class="sub-details" open>
-                <summary class="sub-summary">วิธีที่ 1: Log Shipping (Manual Standby) - ขั้นตอนละเอียด</summary>
-                <div class="sub-content">
-                    <div class="critical-box">
-                        <strong>🚨 ข้อควรระวังสูงสุด (Archive Log Management)</strong>
-                        <ul>
-                            <li><strong>ORA-00257 (พื้นที่เต็ม):</strong> หาก Drive เก็บ Log ฝั่ง Primary เต็ม Database จะหยุดทำงานทันที (Hang) </li>
-                            <li><strong>Network Gap:</strong> หากเน็ตหลุด ไฟล์จะไม่ถูกส่ง และถ้าเราลบไฟล์ฝั่ง Primary ทิ้งก่อนส่ง ข้อมูลจะพังทันที</li>
-                            <li><strong>ลำดับไฟล์:</strong> ห้ามสลับลำดับ Sequence ของไฟล์ .arc เพราะ Standby จะไม่อ่านต่อ</li>
-                        </ul>
-                    </div>
-
-                    <h3>ขั้นตอนการติดตั้ง (Step-by-Step)</h3>
-                    <ol>
-                        <li><span class="badge badge-step">Step 1</span> <strong>[Primary]</strong> เปิดโหมด ARCHIVELOG และตั้ง Path แยก (ห้ามอยู่ Drive C:)
-                            <pre><code>SQL> ALTER SYSTEM SET log_archive_dest_1='LOCATION=E:\Oracle\Archive' SCOPE=BOTH;</code></pre>
-                        </li>
-                        <li><span class="badge badge-step">Step 2</span> <strong>[Standby]</strong> สร้าง Share Folder และให้สิทธิ์ Write กับ User ที่ใช้รัน Script</li>
-                        <li><span class="badge badge-step">Step 3</span> <strong>[Primary]</strong> สร้าง Script ส่งไฟล์ (แนะนำใช้ Robocopy เพราะทนทานกว่า)
-                            <pre><code>robocopy E:\Archive \\DR-Server\Archive /Z /MOT:5 /R:10 /W:30</code></pre>
-                        </li>
-                        <li><span class="badge badge-step">Step 4</span> <strong>[Standby]</strong> รันคำสั่ง Apply Log แบบอัตโนมัติ
-                            <pre><code>SQL> RECOVER AUTOMATIC STANDBY DATABASE;</code></pre>
-                        </li>
-                    </ol>
-
-                    <h3>การตรวจสอบประจำวัน (Daily Checklist)</h3>
-                    <ul>
-                        <li>ตรวจสอบสถานะ Sequence ล่าสุดทั้ง 2 ฝั่ง (ต้องห่างกันไม่เกิน 1-2 ไฟล์)
-                            <pre><code>SQL> SELECT MAX(SEQUENCE#) FROM V$ARCHIVED_LOG WHERE APPLIED='YES';</code></pre>
-                        </li>
-                        <li>ตั้งค่า <strong>RMAN Housekeeping</strong> เพื่อลบไฟล์ที่ส่งแล้วเท่านั้น
-                            <pre><code>RMAN> DELETE ARCHIVELOG ALL COMPLETED BEFORE 'SYSDATE-2';</code></pre>
-                        </li>
-                    </ul>
-                </div>
-            </details>
-
+            <h2>🔗 7. เจาะลึกการทำ Replicate Oracle (ไม่มี Data Guard)</h2>
             <details class="sub-details">
-                <summary class="sub-summary">วิธีที่ 2: Oracle SEHA (High Availability)</summary>
+                <summary class="sub-summary">วิธีที่ 1: Log Shipping (Manual Standby)</summary>
                 <div class="sub-content">
-                    <h3>ขั้นตอนการติดตั้ง</h3>
-                    <ol>
-                        <li>สร้าง <strong>Shared VHDX</strong> ใน Hyper-V และ Mount เข้า VM 2 เครื่องพร้อมกัน</li>
-                        <li>ติดตั้ง <strong>Grid Infrastructure</strong> (ASM) เพื่อทำ Shared Storage</li>
-                        <li>ติดตั้ง Oracle DB ลงบน ASM Disk</li>
-                        <li>ใช้คำสั่ง <code>srvctl add database</code> เพื่อให้ Clusterware รู้จักและย้ายคิวรันได้อัตโนมัติ</li>
-                    </ol>
-                    <p class="warning-box"><strong>ข้อดี:</strong> ข้อมูลไม่หาย (Zero Data Loss) แต่อุปกรณ์ Shared Storage ต้องเสถียรมาก</p>
+                    <p>รัน Script ส่งไฟล์ Archive Log ด้วย Robocopy และตั้ง Task Scheduler...</p>
                 </div>
             </details>
-
-            <details class="sub-details">
-                <summary class="sub-summary">วิธีที่ 3: Logical Replication (CDC - SymmetricDS)</summary>
-                <div class="sub-content">
-                    <h3>ขั้นตอนการติดตั้ง</h3>
-                    <ol>
-                        <li>เปิด <strong>Supplemental Logging</strong> เพื่อให้ Redo Log บันทึกรายละเอียดการแก้ Row</li>
-                        <li>ติดตั้ง <strong>SymmetricDS Java Agent</strong> ไว้ที่เครื่อง Master</li>
-                        <li>Config ไฟล์ <code>engine.properties</code> ระบุ DB URL และ User/Pass</li>
-                        <li>รันคำสั่ง <code>symadmin create-sym-tables</code> เพื่อให้ Tool สร้างตารางมอนิเตอร์ใน Oracle</li>
-                    </ol>
-                    <p class="warning-box"><strong>ดีที่สุดสำหรับ:</strong> การดึงข้อมูลไปเข้าฐานข้อมูลยี่ห้ออื่น หรือทำระบบ Dashboard แยก</p>
-                </div>
-            </details>
-
-            <div class="header" style="background: #0369a1; padding: 20px; margin-top:30px;">
-                <h3 style="margin:0;">🏆 สรุป: วิธีไหนดีที่สุด?</h3>
-                <p style="margin:10px 0 0 0; font-size: 0.95rem;">
-                    1. <strong>Log Shipping:</strong> ดีสุดสำหรับ "งบประหยัด" แต่ Admin ต้องคอยดู Disk Space <br>
-                    2. <strong>SEHA:</strong> ดีสุดสำหรับ "ข้อมูลสำคัญห้ามหาย" แต่ต้องมี Storage กลาง <br>
-                    3. <strong>CDC:</strong> ดีสุดสำหรับ "การเชื่อมต่อระบบอื่น" หรือทำ Real-time Report
-                </p>
-            </div>
         </section>
 
         <section id="tab8" class="tab-pane">
-            <h2>💻 4. PowerShell Cheat Sheet</h2>
-            <pre><code># ตรวจสอบพื้นที่ดิสก์และแจ้งเตือนผ่าน Console
-Get-PSDrive C,D,E | Select-Object Name, @{n='Used(GB)';e={[math]::round($_.Used/1GB,2)}}, @{n='Free(GB)';e={[math]::round($_.Free/1GB,2)}}</code></pre>
+            <h2>📈 8. ระบบ Monitoring & การแจ้งเตือน (Alerting)</h2>
+            <p>เพื่อป้องกันปัญหาระบบล่มโดยไม่รู้ตัว (เช่น พื้นที่ Log เต็ม หรือ Service ดับ) การมีระบบ Monitoring จึงจำเป็นอย่างยิ่งสำหรับ IT Admin ครับ</p>
+
+            <details class="sub-details" open>
+                <summary class="sub-summary">ตาข่ายชั้นที่ 1: ใช้ Checkmk มอนิเตอร์แบบรวมศูนย์</summary>
+                <div class="sub-content">
+                    <p><strong>Checkmk (Raw Edition)</strong> เป็นเครื่องมือ Open Source ที่ยอดเยี่ยมมาก สามารถตั้ง Checkmk Server บน VM <strong>Ubuntu 22.04 LTS</strong> ได้ฟรี และมอนิเตอร์อุปกรณ์ได้ครอบคลุม</p>
+                    <ol>
+                        <li><strong>การมอนิเตอร์ Hyper-V Host:</strong> ติดตั้ง Checkmk Agent บน Windows Server แล้วนำไฟล์ <code>hyperv_vms.ps1</code> ไปใส่ในโฟลเดอร์ plugins เพื่อให้ระบบแสดงสถานะ VM ทุกตัวว่าเปิดหรือปิดอยู่ พร้อมดูการกิน CPU/RAM ของแต่ละ VM ได้</li>
+                        <li><strong>การมอนิเตอร์ Oracle Database:</strong> นำปลั๊กอิน <code>mk_oracle</code> ไปวางที่ฝั่ง Database Server กำหนดสิทธิ์ User ให้เรียบร้อย Checkmk จะสามารถมอนิเตอร์พื้นที่ Tablespace, สถานะ Archive Log, และการทำ Backup ของ RMAN ได้ลึกถึงแก่น</li>
+                        <li><strong>Network & Firewall:</strong> สามารถใช้ SNMP มอนิเตอร์ Traffic ของ Switch หรือ Firewall (เช่น Zyxel USG) เพื่อดู Bandwidth ที่ใช้ในการ Replicate ข้อมูลได้ด้วย</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="sub-details">
+                <summary class="sub-summary">ตาข่ายชั้นที่ 2: เขียน Script แจ้งเตือนเข้า LINE / Telegram</summary>
+                <div class="sub-content">
+                    <p>คุณสามารถนำ Script (PowerShell หรือ Python) ไปผูกกับ Task Scheduler เพื่อให้เช็คสถานะสำคัญ แล้วยิง Webhook แจ้งเตือนเข้ามือถือทีม IT ได้ทันที</p>
+                    
+                    <h3>ตัวอย่าง PowerShell: เช็คพื้นที่ Archive Log แล้วแจ้งเตือน LINE</h3>
+                    <pre><code>$Token = "ใส่_LINE_NOTIFY_TOKEN_ที่นี่"
+$Drive = Get-WmiObject Win32_LogicalDisk | Where-Object { $_.DeviceID -eq "E:" }
+$FreeSpaceGB = [math]::Round($Drive.FreeSpace / 1GB, 2)
+$TotalSpaceGB = [math]::Round($Drive.Size / 1GB, 2)
+$PercentFree = [math]::Round(($FreeSpaceGB / $TotalSpaceGB) * 100, 2)
+
+if ($PercentFree -lt 20) {
+    $Message = "⚠️ [ALERT] พื้นที่ Archive Log (Drive E:) เหลือเพียง $PercentFree% ($FreeSpaceGB GB) กรุณาตรวจสอบด่วน!"
+    $Params = @{
+        Uri = "https://notify-api.line.me/api/notify"
+        Method = "Post"
+        Headers = @{ "Authorization" = "Bearer $Token" }
+        Body = @{ "message" = $Message }
+    }
+    Invoke-RestMethod @Params
+}</code></pre>
+                    <p class="info-box"><strong>ไอเดียเพิ่มเติม:</strong> คุณสามารถปรับโค้ดนี้เพื่อประยุกต์ใช้กับ Telegram API โดยเปลี่ยน URL เป็น <code>https://api.telegram.org/bot[TOKEN]/sendMessage</code> เพื่อแยกห้องแจ้งเตือนสำหรับ Admin / Tech / Staff ได้อย่างเป็นระบบ</p>
+                </div>
+            </details>
+
+        </section>
+
+        <section id="tab9" class="tab-pane">
+            <h2>💻 9. PowerShell Cheat Sheet</h2>
+            <pre><code># ตรวจสอบว่า VM ไหนกำลังเปิดอยู่บ้าง
+Get-VM | Where-Object {$_.State -eq 'Running'}
+
+# ดูสถานะการทำ Replication
+Get-VMReplication</code></pre>
         </section>
     </main>
 </div>
@@ -160,6 +158,7 @@ Get-PSDrive C,D,E | Select-Object Name, @{n='Used(GB)';e={[math]::round($_.Used/
         for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
         document.getElementById(tabName).classList.add("active");
         evt.currentTarget.classList.add("active");
+        if(window.innerWidth <= 900) { window.scrollTo({ top: document.querySelector('.main-content').offsetTop - 20, behavior: 'smooth' }); }
     }
 </script>
 
